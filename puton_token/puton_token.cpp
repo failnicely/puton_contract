@@ -1,6 +1,6 @@
 #include "./puton_token.hpp"
 
-const uint64_t THREE_SEC = 5; 
+const uint64_t SCEHDULE_INTERVAL = 10; // sec
 
 void puton_token::readdb()
 {
@@ -9,14 +9,14 @@ void puton_token::readdb()
     user_table users(N(puton), N(puton));
     post_table posts(N(puton), N(puton));
 
-    for (auto &row : users)
+    for (auto &u : users)
     {
-        eosio::print("user: ", name{row.account}, "\n");
+        eosio::print("user: ", name{u.account}, "\n");
     }
 
-    for (auto &row : posts)
+    for (auto &p : posts)
     {
-        eosio::print("post: ", row.ipfs_addr.c_str(), "\n");
+        eosio::print("post: ", p.ipfs_addr, "\n");
     }
 }
 
@@ -25,6 +25,7 @@ void puton_token::startserver()
     require_auth(_self);
 
     // read data from puton db
+    // cannot modify objects in table of another contract
     post_table posts(N(puton), N(puton));
     for (auto &p: posts)
     {
@@ -37,6 +38,6 @@ void puton_token::startserver()
         permission_level{_self, N(active)},
         _self, N(startserver),
         std::make_tuple(_self, false));
-    tx.delay_sec = THREE_SEC; 
+    tx.delay_sec = SCEHDULE_INTERVAL; 
     tx.send(_self + now(), _self); // needs a unique sender id so append current time
 }

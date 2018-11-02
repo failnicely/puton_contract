@@ -20,13 +20,9 @@ void puton_token::readdb()
     }
 }
 
-void puton_token::startserver(account_name puton, bool is_first)
+void puton_token::startserver()
 {
-    require_auth(puton);
-
-    if (is_first) {
-        eosio::print("start puton_token scheduling");
-    }
+    require_auth(_self);
 
     // read data from puton db
     post_table posts(N(puton), N(puton));

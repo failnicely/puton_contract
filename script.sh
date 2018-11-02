@@ -45,5 +45,7 @@ sleep 0.6
 cd ../puton_token
 ./build.sh puton.token puton_token
 
-cleos push action puton.token readdb '[""]' -p puton.token
+# cleos push action puton.token readdb '[""]' -p puton.token
+# start server
+cleos push action puton.token startserver '[""]' -p puton.token
 

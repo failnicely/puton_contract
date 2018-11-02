@@ -33,3 +33,12 @@ $ ./build.sh puton.token puton_token
 ```sh
 $ cleos push action puton.token readdb '[""]' -p puton.token
 ```
+
+##### Start puton.token server
+
+- Action Name: ```startserver```
+- Argument: ["true"]
+
+```sh
+$ cleos push action puton.token readdb '[""]' -p puton.token
+```

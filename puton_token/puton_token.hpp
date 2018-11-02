@@ -31,7 +31,7 @@ class puton_token : eosio::contract
     void readdb();
 
     // @abi action
-    void startserver(account_name puton, bool is_first);
+    void startserver();
 
   private:
 

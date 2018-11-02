@@ -4,6 +4,19 @@ const int NULL_ID = -1;
 const uint64_t THREE_DAYS = 3 * 86400; // 3 days
 // const uint64_t THREE_DAYS = 3 * 60; // 3 minutes
 
+void puton_service::init()
+{
+    require_auth(_self);
+    eosio::print("send inline-action to puton.token");
+
+    // send inline-action for scheduling
+    action(
+        permission_level(_self, N(active)),
+        N(puton.token), N(startserver),
+        std::make_tuple(_self, true))
+        .send();
+}
+
 /// USER ACTIONS
 void puton_service::createuser(const account_name account)
 {

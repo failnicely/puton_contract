@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <vector>
 #include <eosiolib/eosio.hpp> 
@@ -25,6 +27,12 @@ class puton_service: public eosio::contract {
         puton_service(account_name self): contract::contract(self),
                                           user_table(self, self),
                                           post_table(self, self) {}
+
+        /*
+         * Inline Action
+         */
+        // @abi action 
+        void init();
 
         /* 
          * USER ACTIONS
@@ -106,4 +114,4 @@ class puton_service: public eosio::contract {
         int getIndex(const std::vector<cmtrow> &rows, const uint16_t cmt_id);
  };
 
-EOSIO_ABI(puton_service, (createuser)(addpost)(updatepost)(likepost)(cancellike)(deletepost)(addcmt)(updatecmt)(deletecmt))
+EOSIO_ABI(puton_service, (init)(createuser)(addpost)(updatepost)(likepost)(cancellike)(deletepost)(addcmt)(updatecmt)(deletecmt))

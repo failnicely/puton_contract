@@ -25,20 +25,11 @@ $ ./build.sh puton.token puton_token
 
 #### 액션 리스트
 
-##### Read db from puton table
+##### Reward (deferred)
 
-- Action Name: ```readdb```
+- Action Name: ```reward```
 - Argument: [""]
 
 ```sh
-$ cleos push action puton.token readdb '[""]' -p puton.token
-```
-
-##### Start puton.token server
-
-- Action Name: ```startserver```
-- Argument: [""]
-
-```sh
-$ cleos push action puton.token readdb '[""]' -p puton.token
+$ cleos push action puton.token reward '[""]' -p puton.token
 ```

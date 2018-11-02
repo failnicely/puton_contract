@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# to start after nodeos starting
+sleep 2
+
 # open wallet
 cleos wallet open
 cleos wallet open -n tak
@@ -13,6 +16,9 @@ cleos create account eosio puton EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEj
 cleos create account eosio puton.token EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
 cleos create account eosio tak EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
 cleos create account eosio curl EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+cleos create account eosio camry EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+cleos create account eosio jinny EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+cleos create account eosio uni EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
 
 # build & set puton
 cd puton
@@ -23,34 +29,13 @@ cleos push action puton createuser '["tak"]' -p tak
 sleep 0.6
 cleos push action puton createuser '["curl"]' -p curl
 sleep 0.6
-
-# add post to puton_service
-cleos push action puton addpost '["tak", "TAK_IPFS_ADDR_1"]' -p tak
+cleos push action puton createuser '["uni"]' -p uni
 sleep 0.6
-cleos push action puton addpost '["tak", "TAK_IPFS_ADDR_2"]' -p tak
+cleos push action puton createuser '["camry"]' -p camry
 sleep 0.6
-cleos push action puton addpost '["curl", "CURL_IPFS_ADDR_1"]' -p curl
-sleep 0.6
-cleos push action puton addpost '["curl", "CURL_IPFS_ADDR_2"]' -p curl
-sleep 0.6
-
-# like post 
-cleos push action puton likepost '["tak", "2"]' -p tak
-sleep 0.6
-cleos push action puton likepost '["curl", "1"]' -p curl
-sleep 0.6
-cleos push action puton likepost '["curl", "2"]' -p curl
-
-# add comment to post
-cleos push action puton addcmt '["curl", "0", "comment"]' -p curl
-sleep 0.6
-cleos push action puton addcmt '["tak", "1", "comment"]' -p tak
+cleos push action puton createuser '["jinny"]' -p jinny
 sleep 0.6
 
 # build & set puton_token
 cd ../puton_token
 ./build.sh puton.token puton_token
-
-# start reward
-cleos push action puton.token reward '[""]' -p puton.token
-

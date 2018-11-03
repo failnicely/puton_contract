@@ -746,6 +746,5 @@ fabric.properties
 # eos build files
 *.wast
 *.wasm
-*.abi
 
 # End of https://www.gitignore.io/api/node,xcode,clion,linux,macos,windows,intellij,visualstudio,intellij+all,visualstudiocode

@@ -28,10 +28,8 @@ public:
   void transfer(account_name from, account_name to, asset quantity, string memo);
 
   inline asset get_supply(symbol_name sym) const;
-
   inline asset get_balance(account_name owner, symbol_name sym) const;
 
-  // @abi table
   struct transfer_args
   {
     account_name from;
@@ -43,30 +41,26 @@ public:
 private:
   /// for token contract
 
+  //@abi table accounts i64
   struct account
   {
     asset balance;
 
     uint64_t primary_key() const { return balance.symbol.name(); }
-
-    EOSLIB_SERIALIZE(account, (balance))
   };
 
-  struct currency_stats
+  //@abi table stat i64
+  struct currency
   {
     asset supply;
     asset max_supply;
     account_name issuer;
 
     uint64_t primary_key() const { return supply.symbol.name(); }
-
-    EOSLIB_SERIALIZE(currency_stats, (supply)(max_supply)(issuer))
   };
 
-  // @abi table
   typedef multi_index<N(accounts), account> accounts;
-  // @abi table
-  typedef multi_index<N(stat), currency_stats> stats;
+  typedef multi_index<N(stat), currency> stats;
 
   void sub_balance(account_name owner, asset value);
   void add_balance(account_name owner, asset value, account_name ram_payer);

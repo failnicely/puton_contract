@@ -1,5 +1,6 @@
-#include<puton.hpp>
+#include <puton.hpp>
 
+const int NULL_ID = -1;
 const uint64_t THREE_DAYS = 3 * 86400; // 3 days
 // const uint64_t THREE_DAYS = 3 * 60; // 3 minutes
 
@@ -14,7 +15,7 @@ void puton_service::createuser(const account_name account)
     eosio_assert(itr == user_table.end(), "UserTable already has a user");
 
     // create user
-    user_table.emplace(_self, [&](auto& u) {
+    user_table.emplace(_self, [&](auto &u) {
         u.account = account;
         u.liked_rows = empty_post_rows;
     });
@@ -37,7 +38,7 @@ void puton_service::addpost(const account_name user, const std::string ipfs_addr
     uint64_t post_id = post_table.available_primary_key();
 
     // create post to post_table
-    post_table.emplace(_self, [&](auto& p) {
+    post_table.emplace(_self, [&](auto &p) {
         p.id = post_id;
         p.author = user;
         p.ipfs_addr = ipfs_addr;
@@ -93,7 +94,7 @@ void puton_service::likepost(const account_name user, const uint64_t id)
 
     // check liked
     int likedIndex = getIndex(user_itr->liked_rows, id);
-    eosio_assert(likedIndex == -1, "already liked");
+    eosio_assert(likedIndex == NULL_ID, "already liked");
 
     // update post_table
     post_table.modify(post_itr, _self, [&](auto &post) {
@@ -103,14 +104,15 @@ void puton_service::likepost(const account_name user, const uint64_t id)
         bool is_author = (user == post.author);
         bool is_compensation_period = (post.created_at + THREE_DAYS > now());
 
-        if (!is_author && is_compensation_period) {
+        if (!is_author && is_compensation_period)
+        {
             post.point = post.point + 1;
         }
     });
 
-    // update post_id to user's liked_rows 
+    // update post_id to user's liked_rows
     postrow row;
-    user_table.modify(user_itr, _self, [&](auto& user) {
+    user_table.modify(user_itr, _self, [&](auto &user) {
         row.post_id = id;
         user.liked_rows.push_back(row);
     });
@@ -134,7 +136,7 @@ void puton_service::cancellike(const account_name user, const uint64_t id)
 
     // check liked
     int likedIndex = getIndex(user_itr->liked_rows, id);
-    eosio_assert(likedIndex != -1, "The user did not like this post");
+    eosio_assert(likedIndex != NULL_ID, "The user did not like this post");
 
     // update liked_rows of user
     user_table.modify(user_itr, _self, [&](auto &user) {
@@ -149,7 +151,8 @@ void puton_service::cancellike(const account_name user, const uint64_t id)
         bool is_author = (user == post.author);
         bool is_compensation_period = (post.created_at + THREE_DAYS > now());
 
-        if (!is_author && is_compensation_period) {
+        if (!is_author && is_compensation_period)
+        {
             post.point = post.point - 1;
         }
     });
@@ -208,11 +211,12 @@ void puton_service::addcmt(const account_name author, const uint64_t post_id, co
         post.last_id = row.cmt_id;
         post.cmt_rows.push_back(row);
 
-        // add point to post 
+        // add point to post
         bool is_author = (author == post.author);
         bool is_compensation_period = (post.created_at + THREE_DAYS > now());
 
-        if (!is_author && is_compensation_period) {
+        if (!is_author && is_compensation_period)
+        {
             post.point = post.point + 1;
         }
     });
@@ -237,7 +241,7 @@ void puton_service::updatecmt(const account_name author, const uint64_t post_id,
     post_table.modify(itr, _self, [&](auto &post) {
         // check cmt index
         int cmt_idx = getIndex(post.cmt_rows, cmt_id);
-        eosio_assert(cmt_idx != -1, "Could not found cmt");
+        eosio_assert(cmt_idx != NULL_ID, "Could not found cmt");
 
         // check author
         eosio_assert(post.cmt_rows[cmt_idx].author == author, "Not the author of this cmt");
@@ -265,7 +269,7 @@ void puton_service::deletecmt(const account_name author, const uint64_t post_id,
     // update cmt row
     post_table.modify(itr, _self, [&](auto &post) {
         int cmt_idx = getIndex(post.cmt_rows, cmt_id);
-        eosio_assert(cmt_idx != -1, "Could not found cmt");
+        eosio_assert(cmt_idx != NULL_ID, "Could not found cmt");
 
         // check cmt author
         eosio_assert(post.cmt_rows[cmt_idx].author == author, "Not the author of this cmt");
@@ -275,7 +279,8 @@ void puton_service::deletecmt(const account_name author, const uint64_t post_id,
         bool is_author = (author == post.author);
         bool is_compensation_period = (post.created_at + THREE_DAYS > now());
 
-        if (!is_author && is_compensation_period) {
+        if (!is_author && is_compensation_period)
+        {
             post.point = post.point - 1;
         }
     });
@@ -292,17 +297,23 @@ int puton_service::getIndex(const std::vector<postrow> &rows, const uint64_t id)
     int left = 0;
     int right = rows.size() - 1;
 
-    while (left <= right) {
+    while (left <= right)
+    {
         int mid = left + (right - left) / 2;
-        if (rows[mid].post_id < id) {
+        if (rows[mid].post_id < id)
+        {
             left = mid + 1;
-        } else if (id < rows[mid].post_id) {
+        }
+        else if (id < rows[mid].post_id)
+        {
             right = mid - 1;
-        } else {
+        }
+        else
+        {
             return mid;
         }
     }
-    return -1;
+    return NULL_ID;
 }
 
 int puton_service::getIndex(const std::vector<cmtrow> &rows, const uint16_t cmt_id)
@@ -311,15 +322,21 @@ int puton_service::getIndex(const std::vector<cmtrow> &rows, const uint16_t cmt_
     int left = 0;
     int right = rows.size() - 1;
 
-    while (left <= right) {
+    while (left <= right)
+    {
         int mid = left + (right - left) / 2;
-        if (rows[mid].cmt_id < cmt_id) {
+        if (rows[mid].cmt_id < cmt_id)
+        {
             left = mid + 1;
-        } else if (cmt_id < rows[mid].cmt_id) {
+        }
+        else if (cmt_id < rows[mid].cmt_id)
+        {
             right = mid - 1;
-        } else {
+        }
+        else
+        {
             return mid;
         }
     }
-    return -1;
+    return NULL_ID;
 }

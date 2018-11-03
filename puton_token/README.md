@@ -1,5 +1,10 @@
 # puton_token
 
+## error
+> abi 제대로 생성 안되는 이슈
+> https://github.com/EOSIO/eosio.cdt -> 설치 후 cdt로 빌드
+> refer: https://github.com/EOSIO/eos/issues/4636
+
 ## Prerequisite
 - please see README.md on puton dir
 
@@ -32,4 +37,40 @@ $ ./build.sh puton.token puton_token
 
 ```sh
 $ cleos push action puton.token reward '[""]' -p puton.token
+```
+
+##### PTN 토큰 생성(발행)
+
+- Action Name: ```create```
+- Argument: ["eosio", "총 발행량", "토큰 심볼"]
+
+```
+$ cleos push action puton.token create '["eosio","1000000000000.000 PTN"]' -p puton.token
+```
+
+##### PTN 토큰 유통
+
+- Action Name: ```issue```
+- Argument: ["eos 유저", "발행량 PTN", "메모"]
+
+```
+$ cleos push action puton.token issue '["tak","100.000 PTN","memo"]' -p eosio
+$ cleos push action puton.token issue '["curl","100.000 PTN","memo"]' -p eosio
+```
+
+##### 토큰 transfer 
+
+- Action Name: ```issue```
+- Argument: ["From", "To", "토큰량", "메모"]
+
+```
+$ cleos push action puton.token transfer '{"from":"tak","to":"curl","quantity":"10.000 PTN","memo":"memo"}' -p tak
+$ cleos push action puton.token transfer '["tak","curl","10.000 PTN","memo"]' -p tak
+```
+
+##### 토큰 확인
+
+```
+$ cleos get currency balance puton.token tak
+$ cleos get currency balance puton.token curl
 ```

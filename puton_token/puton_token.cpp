@@ -24,8 +24,7 @@ void puton_token::reward()
     tx.send(_self + now(), _self); // needs a unique sender id so append current time
 }
 
-void puton_token::create(account_name issuer,
-                         asset maximum_supply)
+void puton_token::create(account_name issuer, asset maximum_supply)
 {
     require_auth(_self);
 
@@ -76,10 +75,7 @@ void puton_token::issue(account_name to, asset quantity, string memo)
     }
 }
 
-void puton_token::transfer(account_name from,
-                           account_name to,
-                           asset quantity,
-                           string memo)
+void puton_token::transfer(account_name from, account_name to, asset quantity, string memo)
 {
     eosio_assert(from != to, "cannot transfer to self");
     require_auth(from);

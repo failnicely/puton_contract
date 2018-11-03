@@ -1,9 +1,7 @@
 # puton_token
 
-## error
-> abi 제대로 생성 안되는 이슈
-> https://github.com/EOSIO/eosio.cdt -> 설치 후 cdt로 빌드
-> refer: https://github.com/EOSIO/eos/issues/4636
+## refer
+- https://eosio.stackexchange.com/questions/1448/how-to-access-multi-index-from-other-contract
 
 ## Prerequisite
 - please see README.md on puton dir
@@ -72,5 +70,8 @@ $ cleos push action puton.token transfer '["tak","curl","10.000 PTN","memo"]' -p
 
 ```
 $ cleos get currency balance puton.token tak
+90.000 PTN
+
 $ cleos get currency balance puton.token curl
+10.000 PTN
 ```

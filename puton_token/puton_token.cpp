@@ -46,6 +46,11 @@ void puton_token::create(account_name issuer, asset maximum_supply)
 
 void puton_token::issue(account_name to, asset quantity, string memo)
 {
+     // check account on puton user
+    puton_users users(N(puton), N(puton));
+    auto user_itr = users.find(to);
+    eosio_assert(user_itr != users.end(), "Puton does not has a user");
+
     auto sym = quantity.symbol;
     eosio_assert(sym.is_valid(), "invalid symbol name");
     eosio_assert(memo.size() <= 256, "memo has more than 256 bytes");
@@ -77,6 +82,14 @@ void puton_token::issue(account_name to, asset quantity, string memo)
 
 void puton_token::transfer(account_name from, account_name to, asset quantity, string memo)
 {
+    // check account on puton user
+    puton_users users(N(puton), N(puton));
+    auto from_itr = users.find(from);
+    eosio_assert(from_itr != users.end(), "Puton does not has a user");
+    auto to_itr = users.find(to);
+    eosio_assert(to_itr != users.end(), "Puton does not has a user");
+
+    // start transfer
     eosio_assert(from != to, "cannot transfer to self");
     require_auth(from);
     eosio_assert(is_account(to), "to account does not exist");

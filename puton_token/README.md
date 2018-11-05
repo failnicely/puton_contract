@@ -31,7 +31,7 @@ $ ./build.sh puton.token puton_token
 ##### Reward (deferred)
 
 - Action Name: ```reward```
-- Argument: [""]
+- Argument: null
 
 ```sh
 $ cleos push action puton.token reward '[""]' -p puton.token
@@ -40,7 +40,7 @@ $ cleos push action puton.token reward '[""]' -p puton.token
 ##### PTN 토큰 생성(발행)
 
 - Action Name: ```create```
-- Argument: ["eosio", "총 발행량", "토큰 심볼"]
+- Argument: ["eosio", "총발행량 심볼"]
 
 ```
 $ cleos push action puton.token create '["eosio","1000000000000.000 PTN"]' -p puton.token

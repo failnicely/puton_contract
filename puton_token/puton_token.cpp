@@ -82,11 +82,7 @@ void puton_token::issue(account_name to, asset quantity, string memo)
 
 void puton_token::transfer(account_name from, account_name to, asset quantity, string memo)
 {
-    // check account on puton user
     puton_users users(N(puton), N(puton));
-    auto from_itr = users.find(from);
-    eosio_assert(from_itr != users.end(), "Puton does not has a user: from");
-
     auto to_itr = users.find(to);
     eosio_assert(to_itr != users.end(), "Puton does not has a user: to");
 

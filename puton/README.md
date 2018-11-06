@@ -2,16 +2,22 @@
 
 ## Prerequisite
 
+#### 0. warning
+```
+If you using docker, do use eosio/eos-dev not use eosio/eos
+c.f. https://developers.eos.io/eosio-home/docs/getting-the-software
+```
+
 #### 1. 지갑 생성
 ```sh
-$ cleos wallet create
+$ cleos wallet create --to-console
 "/usr/local/bin/keosd" launched
 Creating wallet: default
 Save password to use in the future to unlock this wallet.
 Without password imported keys will not be retrievable.
 "PW5KRyUSVq3Ytht2mwHNx5ZQWYWginSJkiEhU5n6LWL6ehattytK2"
 
-$ cleos wallet create -n tak
+$ cleos wallet create --to-console -n tak
 Creating wallet: tak
 Save password to use in the future to unlock this wallet.
 Without password imported keys will not be retrievable.
@@ -21,19 +27,21 @@ Without password imported keys will not be retrievable.
 #### 2. 키 생성 및 임포트
 ```sh
 # Create key
-$ cleos create key
-Private key: 5JRoLzjFcpBpEUAR3nErMTjRozeonFjBCnfr35t5MC6tVWQdqyW
-Public key: EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+$ cleos create key --to-console
+Private key: 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
+Public key: EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+# use this keys for testing
+# c.f. https://github.com/EOSIO/eos/issues/4154#issuecomment-397820824
 
-$ cleos create key
+$ cleos create key --to-console
 Private key: 5Ja7N54Y9swFfFg4GgUWBBvAGz3jTKhpU5bEHxnFKpQELV5j5vV
 Public key: EOS6BFKgddEY1BGQSouFAhh366hyETt6A4x25xdMakwXwsqkUiVop
 
 # Import key
-$ cleos wallet import 5JRoLzjFcpBpEUAR3nErMTjRozeonFjBCnfr35t5MC6tVWQdqyW
-imported private key for: EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+$ cleos wallet import --private-key 5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3
+imported private key for: EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 
-$ cleos wallet import 5Ja7N54Y9swFfFg4GgUWBBvAGz3jTKhpU5bEHxnFKpQELV5j5vV
+$ cleos wallet import --private-key 5Ja7N54Y9swFfFg4GgUWBBvAGz3jTKhpU5bEHxnFKpQELV5j5vV
 imported private key for: EOS6BFKgddEY1BGQSouFAhh366hyETt6A4x25xdMakwXwsqkUiVop
 ```
 
@@ -69,11 +77,11 @@ $ nodeos -e -p eosio --plugin eosio::chain_api_plugin --plugin eosio::history_ap
 
 ```sh
 # Create account for puton
-$ cleos create account eosio puton EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+$ cleos create account eosio puton EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 
 # Create account for eos user
-$ cleos create account eosio tak EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
-$ cleos create account eosio curl EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+$ cleos create account eosio tak EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+$ cleos create account eosio curl EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 ```
 
 #### 스마트 컨트랙트 빌드 & 계정에 셋업

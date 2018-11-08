@@ -1,5 +1,8 @@
 # puton_token
 
+## refer
+- https://eosio.stackexchange.com/questions/1448/how-to-access-multi-index-from-other-contract
+
 ## Prerequisite
 - please see README.md on puton dir
 
@@ -28,8 +31,47 @@ $ ./build.sh puton.token puton_token
 ##### Reward (deferred)
 
 - Action Name: ```reward```
-- Argument: [""]
+- Argument: null
 
 ```sh
 $ cleos push action puton.token reward '[""]' -p puton.token
+```
+
+##### PTN 토큰 생성(발행)
+
+- Action Name: ```create```
+- Argument: ["eosio", "총발행량 심볼"]
+
+```
+$ cleos push action puton.token create '["eosio","1000000000000.000 PTN"]' -p puton.token
+```
+
+##### PTN 토큰 유통
+
+- Action Name: ```issue```
+- Argument: ["eos 유저", "발행량 PTN", "메모"]
+
+```
+$ cleos push action puton.token issue '["tak","100.000 PTN","memo"]' -p eosio
+$ cleos push action puton.token issue '["curl","100.000 PTN","memo"]' -p eosio
+```
+
+##### 토큰 transfer 
+
+- Action Name: ```issue```
+- Argument: ["From", "To", "토큰량", "메모"]
+
+```
+$ cleos push action puton.token transfer '{"from":"tak","to":"curl","quantity":"10.000 PTN","memo":"memo"}' -p tak
+$ cleos push action puton.token transfer '["tak","curl","10.000 PTN","memo"]' -p tak
+```
+
+##### 토큰 확인
+
+```
+$ cleos get currency balance puton.token tak
+90.000 PTN
+
+$ cleos get currency balance puton.token curl
+10.000 PTN
 ```

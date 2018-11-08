@@ -67,7 +67,7 @@ void puton_service::updatepost(const account_name author, const uint64_t id, con
     eosio_assert(post_itr != post_table.end(), "PostTable does not has id");
 
     // check author
-    bool is_author = post_itr->author == author;
+    const bool is_author = post_itr->author == author;
     eosio_assert(is_author, "Not the author of this post");
 
     // update post_table
@@ -93,7 +93,7 @@ void puton_service::likepost(const account_name user, const uint64_t id)
     eosio_assert(user_itr != user_table.end(), "UserTable does not has a user");
 
     // check liked
-    int likedIndex = getIndex(user_itr->liked_rows, id);
+    const int likedIndex = getIndex(user_itr->liked_rows, id);
     eosio_assert(likedIndex == NULL_ID, "already liked");
 
     // update post_table
@@ -135,7 +135,7 @@ void puton_service::cancellike(const account_name user, const uint64_t id)
     eosio_assert(user_itr != user_table.end(), "UserTable does not has a user");
 
     // check liked
-    int likedIndex = getIndex(user_itr->liked_rows, id);
+    const int likedIndex = getIndex(user_itr->liked_rows, id);
     eosio_assert(likedIndex != NULL_ID, "The user did not like this post");
 
     // update liked_rows of user
@@ -148,8 +148,8 @@ void puton_service::cancellike(const account_name user, const uint64_t id)
         post.like_cnt = post.like_cnt - 1;
 
         // calculate time range
-        bool is_author = (user == post.author);
-        bool is_compensation_period = (post.created_at + THREE_DAYS > now());
+        const bool is_author = (user == post.author);
+        const bool is_compensation_period = (post.created_at + THREE_DAYS > now());
 
         if (!is_author && is_compensation_period)
         {
@@ -175,7 +175,7 @@ void puton_service::deletepost(const account_name author, const uint64_t id)
     eosio_assert(itr != post_table.end(), "PostTable does not has id");
 
     // check author
-    bool is_author = (itr->author == author);
+    const bool is_author = (itr->author == author);
     eosio_assert(is_author, "Not the author of this post");
 
     // delete post
@@ -212,8 +212,8 @@ void puton_service::addcmt(const account_name author, const uint64_t post_id, co
         post.cmt_rows.push_back(row);
 
         // add point to post
-        bool is_author = (author == post.author);
-        bool is_compensation_period = (post.created_at + THREE_DAYS > now());
+        const bool is_author = (author == post.author);
+        const bool is_compensation_period = (post.created_at + THREE_DAYS > now());
 
         if (!is_author && is_compensation_period)
         {
@@ -240,7 +240,7 @@ void puton_service::updatecmt(const account_name author, const uint64_t post_id,
     // update cmt row
     post_table.modify(itr, _self, [&](auto &post) {
         // check cmt index
-        int cmt_idx = getIndex(post.cmt_rows, cmt_id);
+        const int cmt_idx = getIndex(post.cmt_rows, cmt_id);
         eosio_assert(cmt_idx != NULL_ID, "Could not found cmt");
 
         // check author
@@ -268,7 +268,7 @@ void puton_service::deletecmt(const account_name author, const uint64_t post_id,
 
     // update cmt row
     post_table.modify(itr, _self, [&](auto &post) {
-        int cmt_idx = getIndex(post.cmt_rows, cmt_id);
+        const int cmt_idx = getIndex(post.cmt_rows, cmt_id);
         eosio_assert(cmt_idx != NULL_ID, "Could not found cmt");
 
         // check cmt author
@@ -276,8 +276,8 @@ void puton_service::deletecmt(const account_name author, const uint64_t post_id,
         post.cmt_rows.erase(post.cmt_rows.begin() + cmt_idx);
 
         // subtract point
-        bool is_author = (author == post.author);
-        bool is_compensation_period = (post.created_at + THREE_DAYS > now());
+        const bool is_author = (author == post.author);
+        const bool is_compensation_period = (post.created_at + THREE_DAYS > now());
 
         if (!is_author && is_compensation_period)
         {

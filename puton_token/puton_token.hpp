@@ -1,5 +1,6 @@
 #include "../table/struct.cpp"
 #include <eosiolib/transaction.hpp>
+#include <eosiolib/symbol.hpp>
 #include <eosiolib/asset.hpp>
 
 using namespace eosio;
@@ -64,6 +65,9 @@ private:
 
   void sub_balance(account_name owner, asset value);
   void add_balance(account_name owner, asset value, account_name ram_payer);
+
+  // private var
+  eosio::symbol_type PTN_SYMBOL = eosio::symbol_type(eosio::string_to_symbol(3, "PTN"));
 
   /// for puton_service
 

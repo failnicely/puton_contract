@@ -3,7 +3,7 @@
 // const unsigned_int SCEHDULE_INTERVAL = 10; // sec
 // const uint64_t SEVEN_DAYS = 7 * 86400; // 7 days
 
-const uint64_t REWARD_INTERVAL = 5 * 60;
+const uint64_t REWARD_INTERVAL = 1 * 60;
 
 void puton_token::reward()
 {
@@ -21,6 +21,14 @@ void puton_token::reward()
     // range by created_at
     std::for_each(begin, end, [&](auto &p) {
         eosio::print("post#", p.id, ", author: ", name{p.author}, ", created_at: ", p.created_at, "\n");
+
+        // issue PTN token to author
+        const bool is_positive_point = (p.point > 0);
+        if (is_positive_point) {
+            eosio::print("send inline action for isuse PTN token\n");
+            asset quantity = asset(p.point, PTN_SYMBOL);
+            SEND_INLINE_ACTION(*this, issue, {N(eosio), N(active)}, {p.author, quantity, "rewarded"});
+        }
     });
 
     // deferred transaction to do again
@@ -55,7 +63,7 @@ void puton_token::create(account_name issuer, asset maximum_supply)
 
 void puton_token::issue(account_name to, asset quantity, string memo)
 {
-     // check account on puton user
+    // check account on puton user
     puton_users users(N(puton), N(puton));
     auto user_itr = users.find(to);
     eosio_assert(user_itr != users.end(), "Puton does not has a user");

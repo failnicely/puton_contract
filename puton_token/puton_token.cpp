@@ -1,6 +1,9 @@
 #include "./puton_token.hpp"
 
-const unsigned_int SCEHDULE_INTERVAL = 10; // sec
+// const unsigned_int SCEHDULE_INTERVAL = 10; // sec
+// const uint64_t SEVEN_DAYS = 7 * 86400; // 7 days
+
+const uint64_t REWARD_INTERVAL = 5 * 60;
 
 void puton_token::reward()
 {
@@ -9,10 +12,16 @@ void puton_token::reward()
     // read data from puton_service db
     // cannot modify objects in table of another contract
     puton_posts posts(N(puton), N(puton));
-    for (auto &p : posts)
-    {
-        eosio::print("post#", p.id, ", author: ", name{p.author}, ", ipfs: ", p.ipfs_addr, "\n");
-    }
+    auto post_index = posts.get_index<N(created_at)>();
+    auto begin = post_index.lower_bound(now() - REWARD_INTERVAL);
+    auto end = post_index.lower_bound(now());
+
+    eosio::print("range: ", now() - REWARD_INTERVAL, " ~ ", now(), "\n");
+    eosio::print("----------------------------------------------------------\n");
+    // range by created_at
+    std::for_each(begin, end, [&](auto &p) {
+        eosio::print("post#", p.id, ", author: ", name{p.author}, ", created_at: ", p.created_at, "\n");
+    });
 
     // deferred transaction to do again
     eosio::transaction tx;
@@ -20,7 +29,7 @@ void puton_token::reward()
         permission_level{_self, N(active)},
         _self, N(reward),
         std::make_tuple());
-    tx.delay_sec = SCEHDULE_INTERVAL;
+    tx.delay_sec = REWARD_INTERVAL;
     tx.send(_self + now(), _self); // needs a unique sender id so append current time
 }
 

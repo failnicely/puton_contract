@@ -1,9 +1,7 @@
 #include "./puton_token.hpp"
 
-// const unsigned_int SCEHDULE_INTERVAL = 10; // sec
-// const uint64_t SEVEN_DAYS = 7 * 86400; // 7 days
-
-const uint64_t REWARD_INTERVAL = 1 * 60;
+// const uint64_t REWARD_INTERVAL = 7 * 86400; // 7 days
+const uint64_t REWARD_INTERVAL = 1 * 60; // 1 minute for test
 
 void puton_token::reward()
 {
@@ -24,10 +22,11 @@ void puton_token::reward()
 
         // issue PTN token to author
         const bool is_positive_point = (p.point > 0);
-        if (is_positive_point) {
-            eosio::print("send inline action for isuse PTN token\n");
+        if (is_positive_point)
+        {
+            eosio::print("send inline action to issue PTN token\n");
             asset quantity = asset(p.point, PTN_SYMBOL);
-            SEND_INLINE_ACTION(*this, issue, {N(eosio), N(active)}, {p.author, quantity, "rewarded"});
+            SEND_INLINE_ACTION(*this, issue, {N(eosio), N(active)}, {p.author, quantity, "rewarded post"});
         }
     });
 

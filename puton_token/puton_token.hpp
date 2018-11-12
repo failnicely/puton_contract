@@ -78,16 +78,16 @@ private:
 
 asset puton_token::get_supply(symbol_name sym) const
 {
-    stats statstable(_self, sym);
-    const auto &st = statstable.get(sym);
-    return st.supply;
+  stats statstable(_self, sym);
+  const auto &st = statstable.get(sym);
+  return st.supply;
 }
 
 asset puton_token::get_balance(account_name owner, symbol_name sym) const
 {
-    accounts accountstable(_self, owner);
-    const auto &ac = accountstable.get(sym);
-    return ac.balance;
+  accounts accountstable(_self, owner);
+  const auto &ac = accountstable.get(sym);
+  return ac.balance;
 }
 
 EOSIO_ABI(puton_token, (reward)(create)(issue)(transfer))

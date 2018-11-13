@@ -1,7 +1,8 @@
 #include "./puton_token.hpp"
 
-// const uint64_t REWARD_INTERVAL = 7 * 86400; // 7 days
-const uint64_t REWARD_INTERVAL = 1 * 60; // 1 minute for test
+const uint64_t REWARD_INTERVAL = 7 * 86400; // 7 days
+const uint64_t THREE_DAYS = 3 * 86400; // 3 days
+const uint64_t TEN_DAYS = 10 * 86400; // 10 days
 
 void puton_token::reward()
 {
@@ -11,8 +12,8 @@ void puton_token::reward()
     // cannot modify objects in table of another contract
     puton_posts posts(N(puton), N(puton));
     auto post_index = posts.get_index<N(created_at)>();
-    auto begin = post_index.lower_bound(now() - REWARD_INTERVAL);
-    auto end = post_index.lower_bound(now());
+    auto begin = post_index.lower_bound(now() - TEN_DAYS);
+    auto end = post_index.lower_bound(now() - THREE_DAYS);
 
     eosio::print("range: ", now() - REWARD_INTERVAL, " ~ ", now(), "\n");
     eosio::print("----------------------------------------------------------\n");
@@ -29,6 +30,16 @@ void puton_token::reward()
             SEND_INLINE_ACTION(*this, issue, {N(eosio), N(active)}, {p.author, quantity, "rewarded post"});
         }
     });
+
+    // TODO: add reward system
+    // uint64_t total_point = 0;
+    // std::for_each(begin, end, [&](auto &p) {
+    //     total_point += p.point;
+    // });
+
+    // std::for_each(begin, end, [&](auto &p) {
+    //     // issue PTN token as total_point
+    // });
 
     // deferred transaction to do again
     eosio::transaction tx;

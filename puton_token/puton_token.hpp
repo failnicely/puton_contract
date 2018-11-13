@@ -12,12 +12,7 @@ class puton_token : public contract
 public:
   puton_token(account_name _self) : contract(_self) {}
 
-  /// for puton_service
-
-  // @abi action
-  void reward();
-
-  /// for contract
+  /// for token contract
 
   // @abi action
   void create(account_name issuer, asset maximum_supply);
@@ -38,6 +33,11 @@ public:
     asset quantity;
     string memo;
   };
+
+  /// for puton_service
+
+  // @abi action
+  void reward();
 
 private:
   /// for token contract
@@ -67,7 +67,7 @@ private:
   void add_balance(account_name owner, asset value, account_name ram_payer);
 
   // private var
-  eosio::symbol_type PTN_SYMBOL = eosio::symbol_type(eosio::string_to_symbol(3, "PTN"));
+  symbol_type PTN_SYMBOL = symbol_type(string_to_symbol(3, "PTN"));
 
   /// for puton_service
 

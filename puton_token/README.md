@@ -69,6 +69,17 @@ $ cleos push action puton.token transfer '["tak","curl","10.000 PTN","memo"]' -p
 ##### 토큰 확인
 
 ```
+$ cleos get table puton.token PTN stat
+{
+  "rows": [{
+      "supply": "900.028 PTN",
+      "max_supply": "1000000000000.000 PTN",
+      "issuer": "eosio"
+    }
+  ],
+  "more": false
+}
+
 $ cleos get currency balance puton.token tak
 90.000 PTN
 

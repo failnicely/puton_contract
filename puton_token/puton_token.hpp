@@ -37,7 +37,7 @@ public:
   /// for puton_service
 
   // @abi action
-  void reward();
+  void reward(bool is_first);
 
 private:
   /// for token contract

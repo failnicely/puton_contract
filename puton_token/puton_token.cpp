@@ -1,35 +1,19 @@
 #include "./puton_token.hpp"
 
-const uint64_t REWARD_INTERVAL = 7 * 86400; // 7 days
-const uint64_t THREE_DAYS = 3 * 86400; // 3 days
-const uint64_t TEN_DAYS = 10 * 86400; // 10 days
+// const uint64_t REWARD_INTERVAL = 7 * 86400; // 7 days
+// const uint64_t THREE_DAYS = 3 * 86400; // 3 days
+// const uint64_t TEN_DAYS = 10 * 86400; // 10 days
 
-void puton_token::reward()
+const uint64_t REWARD_INTERVAL = 5 * 60; // 5 minutes
+const uint64_t THREE_DAYS = 1 * 60; // 1 minutes
+const uint64_t TEN_DAYS = 8 * 60; // 8 minutes
+
+void puton_token::reward(bool is_first)
 {
     require_auth(_self);
-
-    // read data from puton_service db
-    // cannot modify objects in table of another contract
-    puton_posts posts(N(puton), N(puton));
-    auto post_index = posts.get_index<N(created_at)>();
-    auto begin = post_index.lower_bound(now() - TEN_DAYS);
-    auto end = post_index.lower_bound(now() - THREE_DAYS);
-
-    eosio::print("range: ", now() - REWARD_INTERVAL, " ~ ", now(), "\n");
-    eosio::print("----------------------------------------------------------\n");
-    // range by created_at
-    std::for_each(begin, end, [&](auto &p) {
-        eosio::print("post#", p.id, ", author: ", name{p.author}, ", created_at: ", p.created_at, "\n");
-
-        // issue PTN token to author
-        const bool is_positive_point = (p.point > 0);
-        if (is_positive_point)
-        {
-            eosio::print("send inline action to issue PTN token\n");
-            asset quantity = asset(p.point, PTN_SYMBOL);
-            SEND_INLINE_ACTION(*this, issue, {N(eosio), N(active)}, {p.author, quantity, "rewarded post"});
-        }
-    });
+    if (is_first) {
+        eosio::print("puton rewarding started");
+    }
 
     // TODO: add reward system
     // uint64_t total_point = 0;
@@ -41,13 +25,40 @@ void puton_token::reward()
     //     // issue PTN token as total_point
     // });
 
+    if (!is_first) {
+        // read data from puton_service db
+        // cannot modify objects in table of another contract
+        puton_posts posts(N(puton), N(puton));
+        auto post_index = posts.get_index<N(created_at)>();
+        auto begin = post_index.lower_bound(now() - TEN_DAYS);
+        auto end = post_index.lower_bound(now() - THREE_DAYS);
+
+        eosio::print("is_first: ", is_first, ", range: ", now() - TEN_DAYS, " ~ ", now() - THREE_DAYS, "\n");
+        eosio::print("----------------------------------------------------------\n");
+        // range by created_at
+        std::for_each(begin, end, [&](auto &p) {
+            eosio::print("post#", p.id, ", author: ", name{p.author}, ", created_at: ", p.created_at, "\n");
+
+            // issue PTN token to author
+            const bool is_positive_point = (p.point > 0);
+            if (is_positive_point)
+            {
+                eosio::print("send inline action to issue PTN token\n");
+                asset quantity = asset(p.point, PTN_SYMBOL);
+                SEND_INLINE_ACTION(*this, issue, {N(eosio), N(active)}, {p.author, quantity, "rewarded post"});
+            }
+        });
+    }
+
     // deferred transaction to do again
     eosio::transaction tx;
     tx.actions.emplace_back(
         permission_level{_self, N(active)},
         _self, N(reward),
-        std::make_tuple());
-    tx.delay_sec = REWARD_INTERVAL;
+        std::make_tuple(false)); // is_first: false
+    // 처음 서비스 시작할 때 reward 액션 날린다고 가정함
+    // 첫 번째(서비스 시작할 때) 10일 후에 실행 -> 이 후에는 7일마다
+    tx.delay_sec = is_first ? TEN_DAYS : REWARD_INTERVAL;
     tx.send(_self + now(), _self); // needs a unique sender id so append current time
 }
 

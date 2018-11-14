@@ -4,28 +4,20 @@
 // const uint64_t THREE_DAYS = 3 * 86400; // 3 days
 // const uint64_t TEN_DAYS = 10 * 86400; // 10 days
 
-const uint64_t REWARD_INTERVAL = 5 * 60; // 5 minutes
-const uint64_t THREE_DAYS = 1 * 60; // 1 minutes
-const uint64_t TEN_DAYS = 8 * 60; // 8 minutes
+const uint64_t REWARD_INTERVAL = 10;
+const uint64_t THREE_DAYS = 10;
+const uint64_t TEN_DAYS = 10;
 
 void puton_token::reward(bool is_first)
 {
     require_auth(_self);
-    if (is_first) {
-        eosio::print("puton rewarding started");
+    if (is_first)
+    {
+        eosio::print("puton.token rewarding started");
     }
 
-    // TODO: add reward system
-    // uint64_t total_point = 0;
-    // std::for_each(begin, end, [&](auto &p) {
-    //     total_point += p.point;
-    // });
-
-    // std::for_each(begin, end, [&](auto &p) {
-    //     // issue PTN token as total_point
-    // });
-
-    if (!is_first) {
+    if (!is_first)
+    {
         // read data from puton_service db
         // cannot modify objects in table of another contract
         puton_posts posts(N(puton), N(puton));
@@ -33,19 +25,29 @@ void puton_token::reward(bool is_first)
         auto begin = post_index.lower_bound(now() - TEN_DAYS);
         auto end = post_index.lower_bound(now() - THREE_DAYS);
 
+        // issue token to puton.token
+        uint64_t total_point = 0;
+        std::for_each(begin, end, [&](auto &p) {
+            total_point += p.point;
+        });
+        asset total_quantity = eosio::asset(total_point * 1000, PTN_SYMBOL);
+
+        // transfer PTN to author
         eosio::print("is_first: ", is_first, ", range: ", now() - TEN_DAYS, " ~ ", now() - THREE_DAYS, "\n");
         eosio::print("----------------------------------------------------------\n");
-        // range by created_at
         std::for_each(begin, end, [&](auto &p) {
-            eosio::print("post#", p.id, ", author: ", name{p.author}, ", created_at: ", p.created_at, "\n");
+            eosio::print("post#", p.id, ", author: ", name{p.author}, ", created_at: ", p.created_at, ", point: ");
+            printi(p.point);
+            eosio::print("\n");
 
-            // issue PTN token to author
+            // transfer PTN token to author
             const bool is_positive_point = (p.point > 0);
             if (is_positive_point)
             {
                 eosio::print("send inline action to issue PTN token\n");
-                asset quantity = asset(p.point, PTN_SYMBOL);
-                SEND_INLINE_ACTION(*this, issue, {N(eosio), N(active)}, {p.author, quantity, "rewarded post"});
+                asset quantity = eosio::asset(p.point * 1000 / total_point, PTN_SYMBOL);
+                SEND_INLINE_ACTION(*this, issue, {_self, N(active)}, {p.author, quantity, "rewarded post"});
+                // SEND_INLINE_ACTION(*this, transfer, {_self, N(active)}, {_self, p.author, quantity, "rewarded post"});
             }
         });
     }
@@ -84,11 +86,6 @@ void puton_token::create(account_name issuer, asset maximum_supply)
 
 void puton_token::issue(account_name to, asset quantity, string memo)
 {
-    // check account on puton user
-    puton_users users(N(puton), N(puton));
-    auto user_itr = users.find(to);
-    eosio_assert(user_itr != users.end(), "Puton does not has a user");
-
     auto sym = quantity.symbol;
     eosio_assert(sym.is_valid(), "invalid symbol name");
     eosio_assert(memo.size() <= 256, "memo has more than 256 bytes");
@@ -120,11 +117,6 @@ void puton_token::issue(account_name to, asset quantity, string memo)
 
 void puton_token::transfer(account_name from, account_name to, asset quantity, string memo)
 {
-    puton_users users(N(puton), N(puton));
-    auto to_itr = users.find(to);
-    eosio_assert(to_itr != users.end(), "Puton does not has a user: to");
-
-    // start transfer
     eosio_assert(from != to, "cannot transfer to self");
     require_auth(from);
     eosio_assert(is_account(to), "to account does not exist");

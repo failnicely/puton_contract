@@ -39,3 +39,9 @@ sleep 0.6
 # build & set puton_token
 cd ../puton_token
 ./build.sh puton.token puton_token
+
+# set PTN token
+cleos push action puton.token create '["puton.token","1000000000000.000 PTN"]' -p puton.token
+sleep 0.6
+cleos push action puton.token reward '[true]' -p puton.token
+sleep 0.6

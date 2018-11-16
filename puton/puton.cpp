@@ -101,25 +101,37 @@ void puton_service::likepost(const account_name user, const uint64_t id)
         post.like_cnt = post.like_cnt + 1;
 
         // calculate time range
-        bool is_author = (user == post.author);
-        bool is_compensation_period = (post.created_at + THREE_DAYS > now());
-
+        const bool is_author = (user == post.author);
+        const bool is_compensation_period = (post.created_at + THREE_DAYS > now());
         if (!is_author && is_compensation_period)
         {
             post.point = post.point + 1;
         }
     });
 
+    SEND_INLINE_ACTION(*this, addlikedrow, {user, N(active)}, {user, id});
+}
+
+void puton_service::addlikedrow(const account_name user, const uint64_t post_id)
+{
+    // check user permission
+    require_auth(user);
+
+    // check account on user_table
+    auto user_itr = user_table.find(user);
+    eosio_assert(user_itr != user_table.end(), "UserTable does not has a user");
+
     // update post_id to user's liked_rows
     postrow row;
     user_table.modify(user_itr, _self, [&](auto &user) {
-        row.post_id = id;
+        row.post_id = post_id;
         user.liked_rows.push_back(row);
     });
 
     // debug print
-    print("post#", id, " liked");
+    print("post#", post_id, " liked");
 }
+
 
 void puton_service::cancellike(const account_name user, const uint64_t id)
 {

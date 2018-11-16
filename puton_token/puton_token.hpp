@@ -1,5 +1,6 @@
 #include "../table/struct.cpp"
 #include <eosiolib/transaction.hpp>
+#include <eosiolib/symbol.hpp>
 #include <eosiolib/asset.hpp>
 
 using namespace eosio;
@@ -11,12 +12,7 @@ class puton_token : public contract
 public:
   puton_token(account_name _self) : contract(_self) {}
 
-  /// for puton_service
-
-  // @abi action
-  void reward();
-
-  /// for contract
+  /// for token contract
 
   // @abi action
   void create(account_name issuer, asset maximum_supply);
@@ -37,6 +33,11 @@ public:
     asset quantity;
     string memo;
   };
+
+  /// for puton_service
+
+  // @abi action
+  void reward(bool is_first);
 
 private:
   /// for token contract
@@ -65,25 +66,28 @@ private:
   void sub_balance(account_name owner, asset value);
   void add_balance(account_name owner, asset value, account_name ram_payer);
 
+  // private var
+  symbol_type PTN_SYMBOL = symbol_type(string_to_symbol(3, "PTN"));
+
   /// for puton_service
 
   // define tables for puton_service
   typedef multi_index<N(users), user> puton_users;
-  typedef multi_index<N(posts), post> puton_posts;
+  typedef multi_index<N(posts), post, indexed_by<N(created_at), const_mem_fun<post, uint64_t, &post::by_created_at>>> puton_posts;
 };
 
 asset puton_token::get_supply(symbol_name sym) const
 {
-    stats statstable(_self, sym);
-    const auto &st = statstable.get(sym);
-    return st.supply;
+  stats statstable(_self, sym);
+  const auto &st = statstable.get(sym);
+  return st.supply;
 }
 
 asset puton_token::get_balance(account_name owner, symbol_name sym) const
 {
-    accounts accountstable(_self, owner);
-    const auto &ac = accountstable.get(sym);
-    return ac.balance;
+  accounts accountstable(_self, owner);
+  const auto &ac = accountstable.get(sym);
+  return ac.balance;
 }
 
 EOSIO_ABI(puton_token, (reward)(create)(issue)(transfer))

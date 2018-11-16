@@ -1,4 +1,5 @@
 #include "../table/struct.cpp"
+#include <eosiolib/transaction.hpp>
 
 using namespace eosio;
 
@@ -11,15 +12,18 @@ public:
                                      post_table(self, self) {}
 
   /* 
-     * USER ACTIONS
-     */
+   * USER ACTIONS
+   */
 
   // @abi action
   void createuser(const account_name account);
 
+  // @abi action
+  void addlikedrow(const account_name user, const uint64_t post_id);
+
   /* 
-     * POST ACTIONS
-     */
+   * POST ACTIONS
+   */
 
   // @abi action
   void addpost(const account_name author, const std::string ipfs_addr);
@@ -37,8 +41,8 @@ public:
   void deletepost(const account_name author, const uint64_t id);
 
   /* 
-     * COMMENT ACTIONS
-     */
+   * COMMENT ACTIONS
+   */
 
   // @abi action
   void addcmt(const account_name author, const uint64_t post_id, const std::string cmt_hash);
@@ -63,4 +67,4 @@ private:
   int getIndex(const std::vector<cmtrow> &rows, const uint16_t cmt_id);
 };
 
-EOSIO_ABI(puton_service, (createuser)(addpost)(updatepost)(likepost)(cancellike)(deletepost)(addcmt)(updatecmt)(deletecmt))
+EOSIO_ABI(puton_service, (createuser)(addlikedrow)(addpost)(updatepost)(likepost)(cancellike)(deletepost)(addcmt)(updatecmt)(deletecmt))

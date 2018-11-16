@@ -4,9 +4,9 @@
 // const uint64_t THREE_DAYS = 3 * 86400; // 3 days
 // const uint64_t TEN_DAYS = 10 * 86400; // 10 days
 
-const uint64_t REWARD_INTERVAL = 10;
-const uint64_t THREE_DAYS = 10;
-const uint64_t TEN_DAYS = 10;
+const uint64_t REWARD_INTERVAL = 7 * 60;
+const uint64_t THREE_DAYS = 3 * 60;
+const uint64_t TEN_DAYS = 10 * 60;
 
 void puton_token::reward(bool is_first)
 {
@@ -30,7 +30,6 @@ void puton_token::reward(bool is_first)
         std::for_each(begin, end, [&](auto &p) {
             total_point += p.point;
         });
-        asset total_quantity = eosio::asset(total_point * 1000, PTN_SYMBOL);
 
         // transfer PTN to author
         eosio::print("is_first: ", is_first, ", range: ", now() - TEN_DAYS, " ~ ", now() - THREE_DAYS, "\n");

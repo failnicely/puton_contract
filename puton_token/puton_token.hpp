@@ -39,6 +39,9 @@ public:
   // @abi action
   void reward(bool is_first);
 
+  // @abi action
+  void reward_user(account_name account, asset quantity, std::string memo);
+
 private:
   /// for token contract
 

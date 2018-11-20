@@ -4,9 +4,9 @@
 // const uint64_t THREE_DAYS = 3 * 86400; // 3 days
 // const uint64_t TEN_DAYS = 10 * 86400; // 10 days
 
-const uint64_t REWARD_INTERVAL = 7 * 60;
-const uint64_t THREE_DAYS = 3 * 60;
-const uint64_t TEN_DAYS = 10 * 60;
+const uint64_t REWARD_INTERVAL = 7 * 20;
+const uint64_t THREE_DAYS = 3 * 20;
+const uint64_t TEN_DAYS = 10 * 20;
 
 // TODO: add tmp struct
 struct rewardrow
@@ -14,6 +14,25 @@ struct rewardrow
     account_name author = 0;
     uint16_t total_point = 0;
 };
+
+void puton_token::reward_user(account_name account, asset quantity, std::string memo)
+{
+    eosio_assert(_self != account, "cannot reward to contract account");
+
+    require_auth(_self);
+
+    eosio_assert(is_account(account), "to account does not exist");
+    auto sym = quantity.symbol.name();
+    stats statstable(_self, sym);
+    const auto &st = statstable.get(sym);
+
+    eosio_assert(quantity.is_valid(), "invalid quantity");
+    eosio_assert(quantity.amount > 0, "must transfer positive quantity");
+    eosio_assert(quantity.symbol == st.supply.symbol, "symbol precision mismatch");
+    eosio_assert(memo.size() <= 256, "memo has more than 256 bytes");
+
+    add_balance(account, quantity, account);
+}
 
 void puton_token::reward(bool is_first)
 {
@@ -54,9 +73,9 @@ void puton_token::reward(bool is_first)
             if (is_positive_point)
             {
                 eosio::print("send inline action to issue PTN token\n");
-                asset quantity = eosio::asset(p.point * 1000 / total_point, PTN_SYMBOL);
-                SEND_INLINE_ACTION(*this, issue, {_self, N(active)}, {p.author, quantity, "rewarded post"});
-                // SEND_INLINE_ACTION(*this, transfer, {_self, N(active)}, {_self, p.author, quantity, "rewarded post"});
+                asset quantity = eosio::asset(p.point * 10000 / total_point, PTN_SYMBOL);
+                issue(p.author, quantity, "rewarded post");
+                // SEND_INLINE_ACTION(*this, issue, {_self, N(active)}, {p.author, quantity, "rewarded post"});
             }
         });
     }

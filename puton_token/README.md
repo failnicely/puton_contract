@@ -75,7 +75,7 @@ $ cleos get table puton.token PTN stat
   "rows": [{
       "supply": "900.028 PTN",
       "max_supply": "1000000000000.000 PTN",
-      "issuer": "eosio"
+      "issuer": "puton.token"
     }
   ],
   "more": false

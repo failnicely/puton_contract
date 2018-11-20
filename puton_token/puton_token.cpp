@@ -8,6 +8,13 @@ const uint64_t REWARD_INTERVAL = 7 * 60;
 const uint64_t THREE_DAYS = 3 * 60;
 const uint64_t TEN_DAYS = 10 * 60;
 
+// TODO: add tmp struct
+struct rewardrow
+{
+    account_name author = 0;
+    uint16_t total_point = 0;
+};
+
 void puton_token::reward(bool is_first)
 {
     require_auth(_self);
@@ -27,7 +34,10 @@ void puton_token::reward(bool is_first)
 
         // issue token to puton.token
         uint64_t total_point = 0;
+        std::vector<rewardrow> reward_rows;
+
         std::for_each(begin, end, [&](auto &p) {
+            // calc total_point
             total_point += p.point;
         });
 

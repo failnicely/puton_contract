@@ -1,19 +1,13 @@
 #include "./puton_token.hpp"
+#include <map>
 
 // const uint64_t REWARD_INTERVAL = 7 * 86400; // 7 days
 // const uint64_t THREE_DAYS = 3 * 86400; // 3 days
 // const uint64_t TEN_DAYS = 10 * 86400; // 10 days
 
-const uint64_t REWARD_INTERVAL = 7 * 20;
-const uint64_t THREE_DAYS = 3 * 20;
-const uint64_t TEN_DAYS = 10 * 20;
-
-// TODO: add tmp struct
-struct rewardrow
-{
-    account_name author = 0;
-    uint16_t total_point = 0;
-};
+const uint64_t REWARD_INTERVAL = 7 * 60;
+const uint64_t THREE_DAYS = 3 * 60;
+const uint64_t TEN_DAYS = 10 * 60;
 
 void puton_token::reward_user(account_name account, asset quantity, std::string memo)
 {
@@ -53,33 +47,36 @@ void puton_token::reward(bool is_first)
 
         // issue token to puton.token
         uint64_t total_point = 0;
-        std::vector<rewardrow> reward_rows;
+        std::map<account_name, uint16_t> reward_map;
 
         std::for_each(begin, end, [&](auto &p) {
             // calc total_point
             total_point += p.point;
+
+            // check exist on map
+            if (reward_map.find(p.author) != reward_map.end()) {
+                reward_map[p.author] += p.point;
+            } else {
+                reward_map[p.author] = 0;
+            }
         });
 
-        // transfer PTN to author
         eosio::print("is_first: ", is_first, ", range: ", now() - TEN_DAYS, " ~ ", now() - THREE_DAYS, "\n");
         eosio::print("----------------------------------------------------------\n");
-        std::for_each(begin, end, [&](auto &p) {
-            eosio::print("post#", p.id, ", author: ", name{p.author}, ", created_at: ", p.created_at, ", point: ");
-            printi(p.point);
-            eosio::print("\n");
-
-            // transfer PTN token to author
-            const bool is_positive_point = (p.point > 0);
+        // iterate reward_map to issue token
+        std::for_each(reward_map.begin(), reward_map.end(), [&](const auto &reward_pair) {
+            const bool is_positive_point = (reward_pair.point > 0);
             if (is_positive_point)
             {
-                eosio::print("send inline action to issue PTN token\n");
-                asset quantity = eosio::asset(p.point * 10000 / total_point, PTN_SYMBOL);
-                issue(p.author, quantity, "rewarded post");
+                // issue token to author
+                eosio::print("issue PTN token to ", name{reward_pair.first}, "\n");
+                asset quantity = eosio::asset(reward_pair.second * 10000, PTN_SYMBOL);
+                issue(reward_pair.first, quantity, "rewarded post");
                 // SEND_INLINE_ACTION(*this, issue, {_self, N(active)}, {p.author, quantity, "rewarded post"});
             }
         });
     }
-
+  
     // deferred transaction to do again
     eosio::transaction tx;
     tx.actions.emplace_back(

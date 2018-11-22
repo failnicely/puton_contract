@@ -1,7 +1,25 @@
 #!/bin/bash
 
+cleos create account eosio taktak EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+cleos create account eosio curlcurl EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+cleos create account eosio camrycamry EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+cleos create account eosio jinnyjinny EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+cleos create account eosio uniuni EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8 EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+# create puton user
+cleos push action puton createuser '["taktak"]' -p taktak
+sleep 0.6
+cleos push action puton createuser '["curlcurl"]' -p curlcurl
+sleep 0.6
+cleos push action puton createuser '["jinnyjinny"]' -p jinnyjinny
+sleep 0.6
+cleos push action puton createuser '["camrycamry"]' -p camrycamry
+sleep 0.6
+cleos push action puton createuser '["uniuni"]' -p uniuni
+sleep 0.6
+
+
 i="0"
-puton_user=("tak" "curl" "camry" "jinny" "uni")
+puton_user=("tak" "curl" "camry" "jinny" "uni","taktak" "curlcurl" "jinnyjinny" "camrycamry" "uniuni")
 
 while [ : ]
 do

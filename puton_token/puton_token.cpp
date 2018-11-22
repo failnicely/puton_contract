@@ -65,7 +65,7 @@ void puton_token::reward(bool is_first)
         eosio::print("----------------------------------------------------------\n");
         // iterate reward_map to issue token
         std::for_each(reward_map.begin(), reward_map.end(), [&](const auto &reward_pair) {
-            const bool is_positive_point = (reward_pair.point > 0);
+            const bool is_positive_point = (reward_pair.second > 0);
             if (is_positive_point)
             {
                 // issue token to author

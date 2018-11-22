@@ -19,7 +19,7 @@ sleep 0.6
 
 
 i="0"
-puton_user=("tak" "curl" "camry" "jinny" "uni","taktak" "curlcurl" "jinnyjinny" "camrycamry" "uniuni")
+puton_user=("tak" "curl" "camry" "jinny" "uni" "taktak" "curlcurl" "jinnyjinny" "camrycamry" "uniuni")
 
 while [ : ]
 do

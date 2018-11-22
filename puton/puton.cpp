@@ -109,29 +109,14 @@ void puton_service::likepost(const account_name user, const uint64_t id)
         }
     });
 
-    SEND_INLINE_ACTION(*this, addlikedrow, {user, N(active)}, {user, id});
-}
-
-void puton_service::addlikedrow(const account_name user, const uint64_t post_id)
-{
-    // check user permission
-    require_auth(user);
-
-    // check account on user_table
-    auto user_itr = user_table.find(user);
-    eosio_assert(user_itr != user_table.end(), "UserTable does not has a user");
-
-    // update post_id to user's liked_rows
-    postrow row;
+     // update post_id to user's liked_rows
     user_table.modify(user_itr, _self, [&](auto &user) {
-        row.post_id = post_id;
-        user.liked_rows.push_back(row);
+        user.liked_rows.push_back(id);
     });
 
     // debug print
-    print("post#", post_id, " liked");
+    print("post#", id, " liked");
 }
-
 
 void puton_service::cancellike(const account_name user, const uint64_t id)
 {
@@ -303,7 +288,7 @@ void puton_service::deletecmt(const account_name author, const uint64_t post_id,
 
 // Private Functions
 
-int puton_service::getIndex(const std::vector<postrow> &rows, const uint64_t id)
+int puton_service::getIndex(const std::vector<uint64_t> &rows, const uint64_t id)
 {
     // binary search
     int left = 0;
@@ -312,11 +297,11 @@ int puton_service::getIndex(const std::vector<postrow> &rows, const uint64_t id)
     while (left <= right)
     {
         int mid = left + (right - left) / 2;
-        if (rows[mid].post_id < id)
+        if (rows[mid] < id)
         {
             left = mid + 1;
         }
-        else if (id < rows[mid].post_id)
+        else if (id < rows[mid])
         {
             right = mid - 1;
         }

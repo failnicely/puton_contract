@@ -6,14 +6,6 @@
 #include <string>
 #include <vector>
 
-// struct post for user_table
-struct postrow
-{
-    uint64_t post_id = 0;
-    // TODO: add additional variable
-    // time liked_at = 0;
-};
-
 // struct cmt for post_table
 struct cmtrow
 {
@@ -27,7 +19,7 @@ struct cmtrow
 struct user
 {
     account_name account;
-    std::vector<postrow> liked_rows;
+    std::vector<uint64_t> liked_rows;
 
     auto primary_key() const { return account; }
 

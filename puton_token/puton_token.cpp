@@ -1,19 +1,23 @@
 #include "./puton_token.hpp"
+#include <map>
 
 // const uint64_t REWARD_INTERVAL = 7 * 86400; // 7 days
 // const uint64_t THREE_DAYS = 3 * 86400; // 3 days
 // const uint64_t TEN_DAYS = 10 * 86400; // 10 days
 
-const uint64_t REWARD_INTERVAL = 7 * 60;
-const uint64_t THREE_DAYS = 3 * 60;
-const uint64_t TEN_DAYS = 10 * 60;
+const uint64_t REWARD_INTERVAL = 7 * 20;
+const uint64_t THREE_DAYS = 3 * 20;
+const uint64_t TEN_DAYS = 10 * 20;
 
-void puton_token::reward(bool is_first)
+void puton_token::reward(uint16_t week)
 {
     require_auth(_self);
+
+    const bool is_first = (week == 0);
     if (is_first)
     {
-        eosio::print("puton.token rewarding started");
+        // init total point
+        set_total_point(0);
     }
 
     if (!is_first)
@@ -27,28 +31,55 @@ void puton_token::reward(bool is_first)
 
         // issue token to puton.token
         uint64_t total_point = 0;
+        std::map<account_name, uint16_t> reward_map;
+
         std::for_each(begin, end, [&](auto &p) {
+            // calc total_point
             total_point += p.point;
-        });
 
-        // transfer PTN to author
-        eosio::print("is_first: ", is_first, ", range: ", now() - TEN_DAYS, " ~ ", now() - THREE_DAYS, "\n");
-        eosio::print("----------------------------------------------------------\n");
-        std::for_each(begin, end, [&](auto &p) {
-            eosio::print("post#", p.id, ", author: ", name{p.author}, ", created_at: ", p.created_at, ", point: ");
-            printi(p.point);
-            eosio::print("\n");
-
-            // transfer PTN token to author
-            const bool is_positive_point = (p.point > 0);
-            if (is_positive_point)
+            // add point after checking map
+            if (reward_map.find(p.author) != reward_map.end())
             {
-                eosio::print("send inline action to issue PTN token\n");
-                asset quantity = eosio::asset(p.point * 1000 / total_point, PTN_SYMBOL);
-                SEND_INLINE_ACTION(*this, issue, {_self, N(active)}, {p.author, quantity, "rewarded post"});
-                // SEND_INLINE_ACTION(*this, transfer, {_self, N(active)}, {_self, p.author, quantity, "rewarded post"});
+                reward_map[p.author] += p.point;
+            }
+            else
+            {
+                reward_map[p.author] = p.point;
             }
         });
+
+        // TODO: modify below
+        // calc inflation rate
+        float inflation_rate = 1; // 첫 주차 보상은 1이다. 일단 가정
+        if (week != 1)
+        {
+            uint64_t last_total_point = get_last_total_point();
+            inflation_rate = (float)total_point / (float)last_total_point;
+            eosio::print("inflation_rate: ");
+            printsf(inflation_rate);
+        }
+
+        eosio::print(", week: ");
+        printi(week);
+        eosio::print(", range: ", now() - TEN_DAYS, " ~ ", now() - THREE_DAYS, "\n");
+        eosio::print("----------------------------------------------------------\n");
+        // iterate reward_map to issue token
+        std::for_each(reward_map.begin(), reward_map.end(), [&](const auto &reward_pair) {
+            const uint64_t point = (reward_pair.second * 1000) * inflation_rate;
+            const bool is_positive_point = point > 0;
+            if (is_positive_point)
+            {
+                // issue token to author
+                eosio::print("issue PTN token to ", name{reward_pair.first}, "\n");
+
+                asset quantity = eosio::asset(point, PTN_SYMBOL);
+                issue(reward_pair.first, quantity, "rewarded post");
+                // SEND_INLINE_ACTION(*this, issue, {_self, N(active)}, {p.author, quantity, "rewarded post"});
+            }
+        });
+
+        // set last total point rate after rewading
+        set_total_point(total_point);
     }
 
     // deferred transaction to do again
@@ -56,7 +87,7 @@ void puton_token::reward(bool is_first)
     tx.actions.emplace_back(
         permission_level{_self, N(active)},
         _self, N(reward),
-        std::make_tuple(false)); // is_first: false
+        std::make_tuple(week + 1)); // week: week + 1
     // 처음 서비스 시작할 때 reward 액션 날린다고 가정함
     // 첫 번째(서비스 시작할 때) 10일 후에 실행 -> 이 후에는 7일마다
     tx.delay_sec = is_first ? TEN_DAYS : REWARD_INTERVAL;
@@ -170,4 +201,28 @@ void puton_token::add_balance(account_name owner, asset value, account_name ram_
             a.balance += value;
         });
     }
+}
+
+void puton_token::set_total_point(uint64_t total_point)
+{
+    auto sym_name = PTN_SYMBOL.name();
+    stats statstable(_self, sym_name);
+    auto existing = statstable.find(sym_name);
+    eosio_assert(existing != statstable.end(), "token with symbol does not exist, create token before issue");
+    const auto &st = *existing;
+
+    statstable.modify(st, 0, [&](auto &s) {
+        s.last_total_point = total_point;
+    });
+}
+
+uint64_t puton_token::get_last_total_point()
+{
+    auto sym_name = PTN_SYMBOL.name();
+    stats statstable(_self, sym_name);
+    auto existing = statstable.find(sym_name);
+    eosio_assert(existing != statstable.end(), "token with symbol does not exist, create token before issue");
+
+    const auto &st = *existing;
+    return st.last_total_point;
 }

@@ -18,9 +18,6 @@ public:
   // @abi action
   void createuser(const account_name account);
 
-  // @abi action
-  void addlikedrow(const account_name user, const uint64_t post_id);
-
   /* 
    * POST ACTIONS
    */
@@ -59,12 +56,12 @@ private:
   multi_index<N(posts), post, indexed_by<N(created_at), const_mem_fun<post, uint64_t, &post::by_created_at>>> post_table;
 
   // private variable
-  std::vector<postrow> empty_post_rows;
+  std::vector<uint64_t> empty_post_rows;
   std::vector<cmtrow> empty_cmt_rows;
 
   // private method
-  int getIndex(const std::vector<postrow> &rows, const uint64_t id);
+  int getIndex(const std::vector<uint64_t> &rows, const uint64_t id);
   int getIndex(const std::vector<cmtrow> &rows, const uint16_t cmt_id);
 };
 
-EOSIO_ABI(puton_service, (createuser)(addlikedrow)(addpost)(updatepost)(likepost)(cancellike)(deletepost)(addcmt)(updatecmt)(deletecmt))
+EOSIO_ABI(puton_service, (createuser)(addpost)(updatepost)(likepost)(cancellike)(deletepost)(addcmt)(updatecmt)(deletecmt))

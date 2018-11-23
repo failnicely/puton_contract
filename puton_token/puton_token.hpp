@@ -37,7 +37,7 @@ public:
   /// for puton_service
 
   // @abi action
-  void reward(bool is_first);
+  void reward(uint16_t week);
 
 private:
   /// for token contract
@@ -56,6 +56,7 @@ private:
     asset supply;
     asset max_supply;
     account_name issuer;
+    uint64_t last_total_point;
 
     uint64_t primary_key() const { return supply.symbol.name(); }
   };
@@ -74,6 +75,10 @@ private:
   // define tables for puton_service
   typedef multi_index<N(users), user> puton_users;
   typedef multi_index<N(posts), post, indexed_by<N(created_at), const_mem_fun<post, uint64_t, &post::by_created_at>>> puton_posts;
+
+  // private func
+  void set_total_point(uint64_t);
+  uint64_t get_last_total_point();
 };
 
 asset puton_token::get_supply(symbol_name sym) const

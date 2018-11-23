@@ -52,5 +52,5 @@ cd ../puton_token
 ./build.sh puton.token puton_token
 
 # start reward
-cleos push action puton.token reward '[""]' -p puton.token
+cleos push action puton.token reward '[0]' -p puton.token
 

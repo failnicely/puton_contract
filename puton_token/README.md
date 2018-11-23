@@ -31,11 +31,11 @@ $ ./build.sh puton.token puton_token
 ##### Reward (deferred)
 
 - Action Name: ```reward```
-- Argument: ["is_first"]
-- 첫 번째만 is_first를 true로 준다 -> deferred transaction에서 false로 날림 
+- Argument: ["week"]
+- deferred transaction에서 week + 1 하면서 호출
  
 ```sh
-$ cleos push action puton.token reward '[true]' -p puton.token
+$ cleos push action puton.token reward '[0]' -p puton.token
 ```
 
 ##### PTN 토큰 생성(발행)

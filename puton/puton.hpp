@@ -1,5 +1,4 @@
 #include "../table/struct.cpp"
-#include <eosiolib/transaction.hpp>
 
 using namespace eosio;
 

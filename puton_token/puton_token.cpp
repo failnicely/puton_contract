@@ -5,9 +5,9 @@
 // const uint64_t THREE_DAYS = 3 * 86400; // 3 days
 // const uint64_t TEN_DAYS = 10 * 86400; // 10 days
 
-const uint64_t REWARD_INTERVAL = 7 * 20;
-const uint64_t THREE_DAYS = 3 * 20;
-const uint64_t TEN_DAYS = 10 * 20;
+const uint64_t REWARD_INTERVAL = 7 * 30;
+const uint64_t THREE_DAYS = 3 * 30;
+const uint64_t TEN_DAYS = 10 * 30;
 
 void puton_token::reward(uint16_t week)
 {

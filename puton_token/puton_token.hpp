@@ -1,5 +1,4 @@
 #include "../table/struct.cpp"
-#include <eosiolib/transaction.hpp>
 #include <eosiolib/symbol.hpp>
 #include <eosiolib/asset.hpp>
 

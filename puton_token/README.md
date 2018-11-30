@@ -92,8 +92,14 @@ $ cleos get currency balance puton.token curl
 #### Jungle testnet 명령어 
  
 ##### Account
-- asas123fdfsa
-- asas12fsddfs
+- esgfijifdgdf: 푸턴 서비스
+  - EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+- dfgdfgf23asd: 푸턴 토큰 서비스
+  - EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
+
+- asas123fdfsa: 유저
+- asas12fsddfs: 유저
+
 
 ##### Key
 - EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
@@ -113,10 +119,45 @@ $ cleos get currency balance puton.token curl
 ##### Command
 
 ```
-$ cleos -u http://zztl1.f3322.net:6868 get info
-$ cleos -u http://zztl1.f3322.net:6868 set contract asas123fdfsa ../puton_token
-$ cleos -u http://zztl1.f3322.net:6868 system buyram asas123fdfsa asas123fdfsa "100 EOS"
-$ cleos -u http://zztl1.f3322.net:6868 push action asas123fdfsa create '["asas123fdfsa","1000000000000.000 PTN"]' -p asas123fdfsa
-$ cleos -u http://zztl1.f3322.net:6868 push action asas123fdfsa issue '["asas12fsddfs","100000.000 PTN","memo"]' -p asas123fdfsa
-$ cleos -u http://zztl1.f3322.net:6868 get currency balance asas123fdfsa asas12fsddfs
+$ cleos -u http://dev.cryptolions.io:38888 get info
+
+$ cleos -u http://dev.cryptolions.io:38888 set contract esgfijifdgdf ../puton
+$ cleos -u http://dev.cryptolions.io:38888 set contract dfgdfgf23asd ../puton_token
+
+$ cleos -u http://dev.cryptolions.io:38888 system buyram asas123fdfsa asas123fdfsa "100 EOS"
+$ cleos -u http://dev.cryptolions.io:38888 system buyram dfgdfgf23asd dfgdfgf23asd "100 EOS"
+$ cleos -u http://dev.cryptolions.io:38888 system buyram esgfijifdgdf esgfijifdgdf "100 EOS"
+```
+
+```
+# create puton account 
+$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf createuser '["asas12fsddfs"]' -p asas12fsddfs
+$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf createuser '["asas123fdfsa"]' -p asas123fdfsa
+
+# post 작성
+$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf addpost '['asas12fsddfs', "IPFS_ADDR_testtest"]' -p asas12fsddfs
+$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf addpost '['asas123fdfsa', "IPFS_ADDR_testtest"]' -p asas123fdfsa
+
+# like post
+$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf likepost '["asas12fsddfs", "0"]' -p asas12fsddfs
+$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf likepost '["asas123fdfsa", "0"]' -p asas123fdfsa
+
+# comment 작성
+$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf addcmt '["asas12fsddfs", '0', "comment_asas12fsddfs"]' -p asas12fsddfs
+$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf addcmt '["asas123fdfsa", '0', "asas123fdfsa"]' -p asas123fdfsa
+
+# table 확인
+$ cleos -u http://dev.cryptolions.io:38888 get table esgfijifdgdf esgfijifdgdf posts
+```
+
+```
+# set PTN token
+cleos -u http://dev.cryptolions.io:38888 set contract dfgdfgf23asd ../puton_token
+
+cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd create '["dfgdfgf23asd","1000000000000.000 PTN"]' -p dfgdfgf23asd
+cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd reward '[0]' -p dfgdfgf23asd
+
+cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd issue '["asas12fsddfs","100000.000 PTN","memo"]' -p dfgdfgf23asd
+
+cleos -u http://dev.cryptolions.io:38888 get currency balance dfgdfgf23asd asas12fsddfs
 ```

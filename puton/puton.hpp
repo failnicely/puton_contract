@@ -52,7 +52,10 @@ public:
 private:
   // define tables
   multi_index<N(users), user> user_table;
-  multi_index<N(posts), post, indexed_by<N(created_at), const_mem_fun<post, uint64_t, &post::by_created_at>>> post_table;
+  multi_index<N(posts), post, 
+    indexed_by<N(created_at), const_mem_fun<post, uint64_t, &post::by_created_at>>,
+    indexed_by<N(author), const_mem_fun<post, account_name, &post::by_author>>
+  > post_table;
 
   // private variable
   std::vector<uint64_t> empty_post_rows;

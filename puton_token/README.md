@@ -154,10 +154,10 @@ $ cleos -u http://dev.cryptolions.io:38888 get table esgfijifdgdf esgfijifdgdf p
 # set PTN token
 cleos -u http://dev.cryptolions.io:38888 set contract dfgdfgf23asd ../puton_token
 
+# 토큰 발행 및 리워드 시작
 cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd create '["dfgdfgf23asd","1000000000000.000 PTN"]' -p dfgdfgf23asd
 cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd reward '[0]' -p dfgdfgf23asd
 
 cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd issue '["asas12fsddfs","100000.000 PTN","memo"]' -p dfgdfgf23asd
-
 cleos -u http://dev.cryptolions.io:38888 get currency balance dfgdfgf23asd asas12fsddfs
 ```

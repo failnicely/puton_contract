@@ -39,8 +39,8 @@ struct post
     time created_at;
 
     auto primary_key() const { return id; }
+    auto by_author() const { return author; }
     uint64_t by_created_at() const { return created_at; }
-    account_name by_author() const { return author; }
 
     EOSLIB_SERIALIZE(post, (id)(author)(ipfs_addr)(cmt_rows)(last_id)(like_cnt)(point)(created_at))
 };

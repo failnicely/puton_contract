@@ -36,6 +36,9 @@ public:
   // @abi action
   void deletepost(const account_name author, const uint64_t id);
 
+  // @abi action
+  void postsbyuser(const account_name author);
+
   /* 
    * COMMENT ACTIONS
    */
@@ -52,7 +55,10 @@ public:
 private:
   // define tables
   multi_index<N(users), user> user_table;
-  multi_index<N(posts), post, indexed_by<N(created_at), const_mem_fun<post, uint64_t, &post::by_created_at>>> post_table;
+  multi_index<N(posts), post, 
+    indexed_by<N(created_at), const_mem_fun<post, uint64_t, &post::by_created_at>>,
+    indexed_by<N(author), const_mem_fun<post, uint64_t, &post::by_author>>
+  > post_table;
 
   // private variable
   std::vector<uint64_t> empty_post_rows;
@@ -63,4 +69,4 @@ private:
   int getIndex(const std::vector<cmtrow> &rows, const uint16_t cmt_id);
 };
 
-EOSIO_ABI(puton_service, (createuser)(addpost)(updatepost)(likepost)(cancellike)(deletepost)(addcmt)(updatecmt)(deletecmt))
+EOSIO_ABI(puton_service, (createuser)(addpost)(updatepost)(likepost)(cancellike)(deletepost)(postsbyuser)(addcmt)(updatecmt)(deletecmt))

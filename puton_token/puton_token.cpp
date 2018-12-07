@@ -1,13 +1,13 @@
 #include "./puton_token.hpp"
 #include <map>
 
-// const uint64_t REWARD_INTERVAL = 7 * 86400; // 7 days
-// const uint64_t THREE_DAYS = 3 * 86400; // 3 days
-// const uint64_t TEN_DAYS = 10 * 86400; // 10 days
+const uint64_t REWARD_INTERVAL = 1 * 86400; // 7 days
+const uint64_t THREE_DAYS = 0.5 * 86400; // 3 days
+const uint64_t TEN_DAYS = 1.5 * 86400; // 10 days
 
-const uint64_t REWARD_INTERVAL = 7 * 3600;
-const uint64_t THREE_DAYS = 3 * 3600;
-const uint64_t TEN_DAYS = 10 * 3600;
+// const uint64_t REWARD_INTERVAL = 7 * 36;
+// const uint64_t THREE_DAYS = 3 * 36;
+// const uint64_t TEN_DAYS = 10 * 36;
 
 void puton_token::reward(uint16_t week)
 {
@@ -24,7 +24,7 @@ void puton_token::reward(uint16_t week)
     {
         // read data from puton_service db
         // cannot modify objects in table of another contract
-        puton_posts posts(N(puton), N(puton));
+        puton_posts posts(N(puton123serv), N(puton123serv));
         auto post_index = posts.get_index<N(created_at)>();
         auto begin = post_index.lower_bound(now() - TEN_DAYS);
         auto end = post_index.lower_bound(now() - THREE_DAYS);
@@ -48,13 +48,12 @@ void puton_token::reward(uint16_t week)
             }
         });
 
-        // TODO: modify below
         // calc inflation rate
-        float inflation_rate = 1; // 첫 주차 보상은 1이다. 일단 가정
+        float inflation_rate = 1; // 첫 주차 인플레이션 비율은 1
         if (week != 1)
         {
             uint64_t last_total_point = get_last_total_point();
-            inflation_rate = (float)total_point / (float)last_total_point;
+            inflation_rate = (float)(total_point - last_total_point) / (float)last_total_point;
             eosio::print("inflation_rate: ");
             printsf(inflation_rate);
         }

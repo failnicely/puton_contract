@@ -73,7 +73,10 @@ private:
 
   // define tables for puton_service
   typedef multi_index<N(users), user> puton_users;
-  typedef multi_index<N(posts), post, indexed_by<N(created_at), const_mem_fun<post, uint64_t, &post::by_created_at>>> puton_posts;
+  typedef multi_index<N(posts), post, 
+    indexed_by<N(created_at), const_mem_fun<post, uint64_t, &post::by_created_at>>,
+    indexed_by<N(author), const_mem_fun<post, uint64_t, &post::by_author>>
+  > puton_posts;
 
   // private func
   void set_total_point(uint64_t);

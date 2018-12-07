@@ -89,6 +89,66 @@ $ cleos get currency balance puton.token curl
 ```
 
 
+#### Jungle Testnet 2.0
+
+```
+# account
+- puton123serv: puton contract
+- dsnsdkasd234: puton.token contract
+- 13dfdfgdfgdg: 유저
+- ty3534543dfg: 유저
+
+# buy ram
+$ cleos -u https://api.jungle.alohaeos.com:443 system buyram puton123serv puton123serv "100 EOS"
+$ cleos -u https://api.jungle.alohaeos.com:443 system buyram dsnsdkasd234 dsnsdkasd234 "100 EOS"
+$ cleos -u https://api.jungle.alohaeos.com:443 system buyram 13dfdfgdfgdg 13dfdfgdfgdg "100 EOS"
+$ cleos -u https://api.jungle.alohaeos.com:443 system buyram ty3534543dfg ty3534543dfg "100 EOS"
+
+# set contract
+$ cleos -u https://api.jungle.alohaeos.com:443 set contract puton123serv ../puton
+$ cleos -u https://api.jungle.alohaeos.com:443 set contract dsnsdkasd234 ../puton_token
+
+# create user
+$ cleos -u https://api.jungle.alohaeos.com:443 push action puton123serv createuser '["13dfdfgdfgdg"]' -p 13dfdfgdfgdg
+
+# create post
+$ cleos -u https://api.jungle.alohaeos.com:443 push action puton123serv addpost '['13dfdfgdfgdg', "IPFS_ADDR_testtest"]' -p 13dfdfgdfgdg
+$ cleos -u https://api.jungle.alohaeos.com:443 push action puton123serv addpost '['13dfdfgdfgdg', "22222222222"]' -p 13dfdfgdfgdg
+$ cleos -u https://api.jungle.alohaeos.com:443 push action puton123serv addpost '['ty3534543dfg', "3333333"]' -p ty3534543dfg
+$ cleos -u https://api.jungle.alohaeos.com:443 push action puton123serv addpost '['ty3534543dfg', "444444"]' -p ty3534543dfg
+
+# comment 작성
+$ cleos -u https://api.jungle.alohaeos.com:443 push action puton123serv addcmt '["13dfdfgdfgdg", '0', "commentecasddasdsa"]' -p 13dfdfgdfgdg
+
+# get table
+$ cleos -u https://api.jungle.alohaeos.com:443 get table puton123serv puton123serv posts
+```
+
+```
+# token 발행
+
+# 토큰 발행 및 리워드 시작
+$ cleos -u https://api.jungle.alohaeos.com:443 push action dsnsdkasd234 create '["dsnsdkasd234","1000000000000.000 PTN"]' -p dsnsdkasd234
+$ cleos -u https://api.jungle.alohaeos.com:443 push action dsnsdkasd234 reward '[0]' -p dsnsdkasd234
+
+# 테스트 토큰 이슈
+$ cleos -u https://api.jungle.alohaeos.com:443 push action dsnsdkasd234 issue '["dsnsdkasd234","100000.000 PTN","memo"]' -p dsnsdkasd234
+$ cleos -u https://api.jungle.alohaeos.com:443 get currency balance dsnsdkasd234 dsnsdkasd234
+```
+
+##### get table by author 
+
+```
+$ curl -X POST https://api.jungle.alohaeos.com:443/v1/chain/get_table_rows -d '{"json":true,"code":"puton123serv","scope":"puton123serv","table":"posts", "index_position":3,"key_type":"i64","lower_bound":"ty3534543dfg","upper_bound":"ty3534543dfg"}'
+
+$ curl -X POST https://api.jungle.alohaeos.com:443/v1/chain/get_table_rows -d '{"json":true,"code":"puton123serv","scope":"puton123serv","table":"posts", "index_position":3,"key_type":"i64","lower_bound":"ty3534543dfg","upper_bound":"ty3534543dfg"}'
+```
+
+
+------------
+
+### DEPRECATED
+
 #### Jungle testnet 명령어 
  
 ##### Account
@@ -99,7 +159,6 @@ $ cleos get currency balance puton.token curl
 
 - asas123fdfsa: 유저
 - asas12fsddfs: 유저
-
 
 ##### Key
 - EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
@@ -121,11 +180,15 @@ $ cleos get currency balance puton.token curl
 ```
 $ cleos -u http://dev.cryptolions.io:38888 get info
 
-$ cleos -u http://dev.cryptolions.io:38888 set contract esgfijifdgdf ../puton
+$ cleos -u http://dev.cryptolions.io:38888 set contract asas12fsddfs ../puton
 $ cleos -u http://dev.cryptolions.io:38888 set contract dfgdfgf23asd ../puton_token
 
 $ cleos -u http://dev.cryptolions.io:38888 system buyram asas123fdfsa asas123fdfsa "100 EOS"
 $ cleos -u http://dev.cryptolions.io:38888 system buyram dfgdfgf23asd dfgdfgf23asd "100 EOS"
+$ cleos -u http://dev.cryptolions.io:38888 system buyram esgfijifdgdf esgfijifdgdf "100 EOS"
+
+$ cleos -u http://dev.cryptolions.io:38888 system buyram esgfijifdgdf esgfijifdgdf "100 EOS"
+$ cleos -u http://dev.cryptolions.io:38888 system buyram esgfijifdgdf esgfijifdgdf "100 EOS"
 $ cleos -u http://dev.cryptolions.io:38888 system buyram esgfijifdgdf esgfijifdgdf "100 EOS"
 ```
 
@@ -154,10 +217,10 @@ $ cleos -u http://dev.cryptolions.io:38888 get table esgfijifdgdf esgfijifdgdf p
 # set PTN token
 cleos -u http://dev.cryptolions.io:38888 set contract dfgdfgf23asd ../puton_token
 
+# 토큰 발행 및 리워드 시작
 cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd create '["dfgdfgf23asd","1000000000000.000 PTN"]' -p dfgdfgf23asd
 cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd reward '[0]' -p dfgdfgf23asd
 
 cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd issue '["asas12fsddfs","100000.000 PTN","memo"]' -p dfgdfgf23asd
-
 cleos -u http://dev.cryptolions.io:38888 get currency balance dfgdfgf23asd asas12fsddfs
 ```

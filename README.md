@@ -2,7 +2,7 @@
 
   <img alt="puton" title="puton" src="https://user-images.githubusercontent.com/7614353/47765294-a0af7700-dd0c-11e8-9348-511460dd8a38.png" width="300">
 
-----
+<br />
 
 ## Prerequisite
 
@@ -67,8 +67,7 @@ Unlocked: tak
 $ nodeos -e -p eosio --plugin eosio::chain_api_plugin --plugin eosio::history_api_plugin --delete-all-block --contracts-console
 ```
 
----
-
+<br />
 
 ## How to use
 Please refer below
@@ -76,9 +75,7 @@ Please refer below
 - [puton](https://github.com/failnicely/puton_contract/blob/develop/puton/README.md)
 - [puton.token](https://github.com/failnicely/puton_contract/blob/develop/puton_token/README.md) 
 
-
-
---- 
+<br />
 
 ## Command for Jungle Testnet 2.0 
 
@@ -147,6 +144,5 @@ $ cleos -u https://api.jungle.alohaeos.com:443 get currency balance dsnsdkasd234
 
 ```
 $ curl -X POST https://api.jungle.alohaeos.com:443/v1/chain/get_table_rows -d '{"json":true,"code":"puton123serv","scope":"puton123serv","table":"posts", "index_position":3,"key_type":"i64","lower_bound":"ty3534543dfg","upper_bound":"ty3534543dfg"}'
-
-$ curl -X POST https://api.jungle.alohaeos.com:443/v1/chain/get_table_rows -d '{"json":true,"code":"puton123serv","scope":"puton123serv","table":"posts", "index_position":3,"key_type":"i64","lower_bound":"ty3534543dfg","upper_bound":"ty3534543dfg"}'
+$ curl -X POST https://api.jungle.alohaeos.com:443/v1/chain/get_table_rows -d '{"json":true,"code":"puton123serv","scope":"puton123serv","table":"posts", "index_position":3,"key_type":"i64","lower_bound":"13dfdfgdfgdg","upper_bound":"13dfdfgdfgdg"}'
 ```

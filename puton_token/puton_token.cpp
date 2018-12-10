@@ -1,9 +1,9 @@
 #include "./puton_token.hpp"
 #include <map>
 
-const uint64_t REWARD_INTERVAL = 1 * 86400; // 7 days
-const uint64_t THREE_DAYS = 0.5 * 86400; // 3 days
-const uint64_t TEN_DAYS = 1.5 * 86400; // 10 days
+const uint64_t REWARD_INTERVAL = 7 * 86400; // 7 days
+const uint64_t THREE_DAYS = 3 * 86400; // 3 days
+const uint64_t TEN_DAYS = 10 * 86400; // 10 days
 
 // const uint64_t REWARD_INTERVAL = 7 * 36;
 // const uint64_t THREE_DAYS = 3 * 36;

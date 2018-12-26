@@ -131,6 +131,9 @@ $ cleos -u https://api.jungle.alohaeos.com:443 get table puton123serv puton123se
 ### Token
 
 ```
+# set permission for deferred transaction
+cleos -u https://api.jungle.alohaeos.com:443 set account permission dsnsdkasd234 active '{"threshold": 1,"keys": [{"key": "EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8","weight": 1}],"accounts": [{"permission":{"actor":"dsnsdkasd234","permission":"eosio.code"},"weight":1}]}' owner -p dsnsdkasd234
+
 # create token and start reward 
 $ cleos -u https://api.jungle.alohaeos.com:443 push action dsnsdkasd234 create '["dsnsdkasd234","1000000000000.000 PTN"]' -p dsnsdkasd234
 $ cleos -u https://api.jungle.alohaeos.com:443 push action dsnsdkasd234 reward '[0]' -p dsnsdkasd234

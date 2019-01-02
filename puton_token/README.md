@@ -1,8 +1,5 @@
 # puton_token
 
-## refer
-- https://eosio.stackexchange.com/questions/1448/how-to-access-multi-index-from-other-contract
-
 ## Prerequisite
 - please see README.md on puton dir
 
@@ -89,83 +86,5 @@ $ cleos get currency balance puton.token curl
 ```
 
 
-
-------------
-
-### DEPRECATED
-
-#### Jungle testnet 명령어 
- 
-##### Account
-- esgfijifdgdf: 푸턴 서비스
-  - EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
-- dfgdfgf23asd: 푸턴 토큰 서비스
-  - EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
-
-- asas123fdfsa: 유저
-- asas12fsddfs: 유저
-
-##### Key
-- EOS8Txt52C9jUD4Pc5LFsceeBy9RKi9MSVEV4WvoaB2KpEjHwyPz8
-
-##### API Endpoint
-- http://jungle.cryptolions.io:18888
-- http://dev.cryptolions.io:38888
-- https://jungle.eosio.cr:443
-- http://jungle.cryptolions.io:18888
-- http://dev.cryptolions.io:18888
-- http://jungle.eosgen.io:80
-- http://jungle.eosmeso.io:8888
-- http://167.99.91.77:8888
-- http://zztl1.f3322.net:6868
-- http://zztl1.f3322.net:6868
-
-##### Command
-
-```
-$ cleos -u http://dev.cryptolions.io:38888 get info
-
-$ cleos -u http://dev.cryptolions.io:38888 set contract asas12fsddfs ../puton
-$ cleos -u http://dev.cryptolions.io:38888 set contract dfgdfgf23asd ../puton_token
-
-$ cleos -u http://dev.cryptolions.io:38888 system buyram asas123fdfsa asas123fdfsa "100 EOS"
-$ cleos -u http://dev.cryptolions.io:38888 system buyram dfgdfgf23asd dfgdfgf23asd "100 EOS"
-$ cleos -u http://dev.cryptolions.io:38888 system buyram esgfijifdgdf esgfijifdgdf "100 EOS"
-
-$ cleos -u http://dev.cryptolions.io:38888 system buyram esgfijifdgdf esgfijifdgdf "100 EOS"
-$ cleos -u http://dev.cryptolions.io:38888 system buyram esgfijifdgdf esgfijifdgdf "100 EOS"
-$ cleos -u http://dev.cryptolions.io:38888 system buyram esgfijifdgdf esgfijifdgdf "100 EOS"
-```
-
-```
-# create puton account 
-$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf createuser '["asas12fsddfs"]' -p asas12fsddfs
-$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf createuser '["asas123fdfsa"]' -p asas123fdfsa
-
-# post 작성
-$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf addpost '['asas12fsddfs', "IPFS_ADDR_testtest"]' -p asas12fsddfs
-$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf addpost '['asas123fdfsa', "IPFS_ADDR_testtest"]' -p asas123fdfsa
-
-# like post
-$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf likepost '["asas12fsddfs", "0"]' -p asas12fsddfs
-$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf likepost '["asas123fdfsa", "0"]' -p asas123fdfsa
-
-# comment 작성
-$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf addcmt '["asas12fsddfs", '0', "comment_asas12fsddfs"]' -p asas12fsddfs
-$ cleos -u http://dev.cryptolions.io:38888 push action esgfijifdgdf addcmt '["asas123fdfsa", '0', "asas123fdfsa"]' -p asas123fdfsa
-
-# table 확인
-$ cleos -u http://dev.cryptolions.io:38888 get table esgfijifdgdf esgfijifdgdf posts
-```
-
-```
-# set PTN token
-cleos -u http://dev.cryptolions.io:38888 set contract dfgdfgf23asd ../puton_token
-
-# 토큰 발행 및 리워드 시작
-cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd create '["dfgdfgf23asd","1000000000000.000 PTN"]' -p dfgdfgf23asd
-cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd reward '[0]' -p dfgdfgf23asd
-
-cleos -u http://dev.cryptolions.io:38888 push action dfgdfgf23asd issue '["asas12fsddfs","100000.000 PTN","memo"]' -p dfgdfgf23asd
-cleos -u http://dev.cryptolions.io:38888 get currency balance dfgdfgf23asd asas12fsddfs
-```
+> refer
+> - [How to read table from other contract]( https://eosio.stackexchange.com/questions/1448/how-to-access-multi-index-from-other-contract)

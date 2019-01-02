@@ -79,7 +79,7 @@ Please refer below
 
 ## Command for Jungle Testnet 2.0 
 
-### Account
+### Account Info
 - puton123serv: puton contract
 - dsnsdkasd234: puton.token contract
 - 13dfdfgdfgdg: user
@@ -119,7 +119,8 @@ $ cleos -u https://api.jungle.alohaeos.com:443 push action puton123serv addpost 
 ### Add comment
 
 ```
-$ cleos -u https://api.jungle.alohaeos.com:443 push action puton123serv addcmt '["13dfdfgdfgdg", '0', "commentecasddasdsa"]' -p 13dfdfgdfgdg
+$ cleos -u https://api.jungle.alohaeos.com:443 push action puton123serv addcmt '["13dfdfgdfgdg", '0', "comment_by_13dfdfgdfgdg"]' -p 13dfdfgdfgdg
+$ cleos -u https://api.jungle.alohaeos.com:443 push action puton123serv addcmt '["ty3534543dfg", '0', "comment_by_ty3534543dfg"]' -p ty3534543dfg
 ```
 
 ### Get table
@@ -138,12 +139,12 @@ cleos -u https://api.jungle.alohaeos.com:443 set account permission dsnsdkasd234
 $ cleos -u https://api.jungle.alohaeos.com:443 push action dsnsdkasd234 create '["dsnsdkasd234","1000000000000.000 PTN"]' -p dsnsdkasd234
 $ cleos -u https://api.jungle.alohaeos.com:443 push action dsnsdkasd234 reward '[0]' -p dsnsdkasd234
 
-# issue token for test
+# issue and check token
 $ cleos -u https://api.jungle.alohaeos.com:443 push action dsnsdkasd234 issue '["dsnsdkasd234","100000.000 PTN","memo"]' -p dsnsdkasd234
 $ cleos -u https://api.jungle.alohaeos.com:443 get currency balance dsnsdkasd234 dsnsdkasd234
 ```
 
-### RPC communication
+### RPC communication to read table
 
 ```
 $ curl -X POST https://api.jungle.alohaeos.com:443/v1/chain/get_table_rows -d '{"json":true,"code":"puton123serv","scope":"puton123serv","table":"posts", "index_position":3,"key_type":"i64","lower_bound":"ty3534543dfg","upper_bound":"ty3534543dfg"}'

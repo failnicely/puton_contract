@@ -36,9 +36,6 @@ public:
   // @abi action
   void deletepost(const account_name author, const uint64_t id);
 
-  // @abi action
-  void postsbyuser(const account_name author);
-
   /* 
    * COMMENT ACTIONS
    */
@@ -69,4 +66,4 @@ private:
   int getIndex(const std::vector<cmtrow> &rows, const uint16_t cmt_id);
 };
 
-EOSIO_ABI(puton_service, (createuser)(addpost)(updatepost)(likepost)(cancellike)(deletepost)(postsbyuser)(addcmt)(updatecmt)(deletecmt))
+EOSIO_ABI(puton_service, (createuser)(addpost)(updatepost)(likepost)(cancellike)(deletepost)(addcmt)(updatecmt)(deletecmt))

@@ -182,31 +182,6 @@ void puton_service::deletepost(const account_name author, const uint64_t id)
     print("post#", id, " deleted");
 }
 
-void puton_service::postsbyuser(const account_name user)
-{
-    // check user permission
-    require_auth(user);
-
-    // check account on user_table
-    auto user_itr = user_table.find(user);
-    eosio_assert(user_itr != user_table.end(), "UserTable does not has a user");
-
-    // get post index by author
-    // get post index by author
-    auto author_index = post_table.get_index<N(author)>();
-    auto post_itr = author_index.find(user);
-
-    // print post by author
-    for (; post_itr != author_index.end() && post_itr->author == user; ++post_itr)
-    {
-        print("id: ", post_itr->id, ", ");
-        print("author: ", name{post_itr->author}, ", ");
-        print("ipfs: ", post_itr->ipfs_addr, ", ");
-        print("created_at: ", post_itr->created_at, "\n");
-    }
-}
-
-
 /// COMMENT ACTION
 void puton_service::addcmt(const account_name author, const uint64_t post_id, const std::string cmt_hash)
 {

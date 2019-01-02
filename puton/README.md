@@ -68,16 +68,6 @@ $ cleos push action puton likepost '["curl", "1"]' -p curl
 $ cleos push action puton likepost '["curl", "2"]' -p curl
 ```
 
-##### Post by author
-
-- Action Name: ```postsbyuser```
-- Param: ["PUTON 유저"]
-
-```sh
-$ cleos push action puton postsbyuser '["tak"]' -p tak
-$ cleos push action puton postsbyuser '["curl"]' -p curl
-```
-
 ##### 좋아요 취소
 
 - Action Name: ```cancellike```

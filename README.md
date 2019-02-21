@@ -1,4 +1,5 @@
 # puton
+**:tada: [We won 2nd place of the first DApp development contest hosted by EOSYS!](https://medium.com/eosys/announcement-of-the-1st-dapp-contest-winners-50650d6a43b1)**
 
   <img alt="puton" title="puton" src="https://user-images.githubusercontent.com/7614353/47765294-a0af7700-dd0c-11e8-9348-511460dd8a38.png" width="300">
 
